@@ -1,26 +1,11 @@
 
-- add analog support
-
-- display all files
-
-- custom file icons
-
-- suggest to install archives directly, not saves
-
-- custom rar/zip icons
-
 - make icons disappear at hb launch
 
 - make beginning appear alpha slower
 
 - raccourci homebrew/save : slideIn ds le bon sens
 
-- reduce tps démarrage:
-	use sceIoDopen instead of sceIoopen to check bgs
-
 - make extracting thread + animate extraction
-
-- make delete feature using sceIoRmdir / sceIoRemove
 
 - add thread img_loading
 
