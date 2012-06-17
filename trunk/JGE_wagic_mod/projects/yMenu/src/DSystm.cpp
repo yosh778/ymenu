@@ -360,7 +360,9 @@ void DSystm::update()
 		}
 		else if (displayer->getEventType() == 1)
 		{
-			Lib::removeDir( mDir->mFolders[mDir->mCurFolder].getPathName() );
+			if ( mDir->mFolders[mDir->mCurFolder].IsFolder() )	Lib::removeDir( mDir->mFolders[mDir->mCurFolder].getPathName() );
+			else	sceIoRemove( mDir->mFolders[mDir->mCurFolder].getPathName().c_str() );
+			
 			mDir->mFolders[mDir->mCurFolder].Destroy();
 			mDir->mFolders.erase(mDir->mFolders.begin()+mDir->mCurFolder);
 			if (mDir->mCurFolder == mDir->mFolders.size() && mDir->mCurFolder>0)	mDir->mCurFolder--;
