@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Images">
+</Property><Property Name="Solution File" Value="D:\Bureau\Leo\studium\info\c++\all\libs psp\JGE_1_0\JGE_1_0\JGE\Tutorials\02.RenderingImages\Images.sln">
+</Property><Property Name="Date" Value="Donnerstag, 17. Mai 2012">
+</Property><Property Name="Time" Value="20:10">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Images.sln" Description="File successfully backed up as D:\Bureau\Leo\studium\info\c++\all\libs psp\JGE_1_0\JGE_1_0\JGE\Tutorials\02.RenderingImages\Images.sln.old">
+</Event><Event ErrorLevel="0" Project="Images" Source="Images.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="Images" Source="Images.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="Images" Source="Images.vcproj" Description="Project file successfully backed up as 'D:\Bureau\Leo\studium\info\c++\all\libs psp\JGE_1_0\JGE_1_0\JGE\Tutorials\02.RenderingImages\Images.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="Images" Source="Images.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="Images" Source="Images.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="JGE" Source="..\..\JGE\JGE.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="JGE" Source="..\..\JGE\JGE.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Images.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Images.sln" Description="Converted">
+</Event></UpgradeLog>
