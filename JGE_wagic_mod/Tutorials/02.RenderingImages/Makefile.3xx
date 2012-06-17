@@ -1,0 +1,22 @@
+TARGET = Images
+OBJS = src/GameApp.o src/GameLauncher.o
+
+BUILD_PRX = 1
+PSP_FW_VERSION=371
+
+CFLAGS = -O2 -G0 -Wall -DDEVHOOK -DPSPFW3XX
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+ASFLAGS = $(CXXFLAGS)
+
+
+INCDIR = ../../JGE/include ../../JGE/src/zipFS ../../JGE/include/psp ../../JGE/include/psp/freetype2 ../../JGE/src ../../Boost ../../../libs/include
+LIBDIR = ../../JGE/lib/psp ../../../libs/lib
+LDFLAGS =
+LIBS = -ljge300 -lhgetools -lfreetype -lc -ljpeg -lgif -lpng -lz -lm -lmikmod -lpsppower -lpspmpeg -lpspaudiocodec -lpspaudiolib -lpspaudio -lpspmp3 -lpsprtc -lstdc++ -lpspfpu -lintrafont -lpspgum -lpspgu -ldxppng
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = JGE++ Images Demo
+PSP_EBOOT_ICON = icon.png
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak

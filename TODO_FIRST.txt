@@ -1,0 +1,11 @@
+
+#- add analog support
+#- display all files
+#- custom file icons
+#- suggest to install archives directly, not saves
+#- custom rar/zip icons
+#- make delete feature using sceIoRmdir / sceIoRemove
+- make icons disappear at hb launch
+- raccourci homebrew/save : slideIn ds le bon sens
+- make beginning appear alpha slower
+- make path string align on a max x offset if too big

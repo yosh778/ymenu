@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="JGE">
+</Property><Property Name="Solution File" Value="D:\Bureau\Leo\studium\info\c++\all\libs psp\wagic\JGE\JGE.sln">
+</Property><Property Name="Date" Value="Mittwoch, 23. Mai 2012">
+</Property><Property Name="Time" Value="02:45">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="JGE.sln" Description="File successfully backed up as D:\Bureau\Leo\studium\info\c++\all\libs psp\wagic\JGE\JGE.sln.old">
+</Event><Event ErrorLevel="0" Project="JGE" Source="JGE.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="JGE" Source="JGE.vcproj" Description="Converted">
+</Event><Event ErrorLevel="2" Project="JGE" Source="JGE.vcproj" Description="">
+</Event><Event ErrorLevel="0" Project="" Source="JGE.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="JGE.sln" Description="Converted">
+</Event></UpgradeLog>
