@@ -7,7 +7,7 @@ const int YEntry::interX = 10;
 const int YEntry::MinInterX = 0;//YEntry::interX;
 const float YEntry::DEF_ZOOM = 0.5;
 const float YEntry::DEF_INT_Y = 20;
-const unsigned YEntry::DEF_ALPHA = 240;
+const unsigned YEntry::DEF_ALPHA = 210;
 const string YEntry::ARCHIVE_EXTS[] = { "zip", "rar" };
 string YEntry::EBOOT_NAMES[] = EBOOTNAMES;
 
