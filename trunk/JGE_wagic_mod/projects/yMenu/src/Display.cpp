@@ -112,10 +112,10 @@ void Display::SwapBg( int& finished, int mode )
 		mCurBg = alea;
 
 		#ifdef PSP
-		if (mode)	LoadTQThread ( mWallpapers[mCurBg], TEX_TYPE_USE_VRAM, mBgTex, mBg, finished );
-		else	LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_USE_VRAM, mBgTex, mBg );
+		if (mode)	LoadTQThread ( mWallpapers[mCurBg], TEX_TYPE_NONE, mBgTex, mBg, finished );
+		else	LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_NONE, mBgTex, mBg );
 		#else
-		LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_USE_VRAM, mBgTex, mBg );
+		LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_NONE, mBgTex, mBg );
 		finished = 1;
 		#endif
 	}
