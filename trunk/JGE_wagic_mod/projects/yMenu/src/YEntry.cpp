@@ -133,7 +133,6 @@ void YEntry::initDispName()
 		if (name != NULL)
 		{
 			fName = name;
-			SAFE_FREE(name);
 			done = true;
 		}
 	}
