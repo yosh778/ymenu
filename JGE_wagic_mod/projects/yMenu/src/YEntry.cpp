@@ -35,7 +35,7 @@ YEntry::YEntry( SceIoDirent folderEntry )
 
 YEntry::~YEntry()
 {
-	
+
 }
 
 
@@ -53,7 +53,7 @@ void YEntry::Create()
 
 			if (mEboot->getPngData() != NULL)
 			{
-				this->mIconTex = renderer->LoadTexture(this->getEbootPath().c_str(), TEX_TYPE_USE_VRAM
+				this->mIconTex = renderer->LoadTexture(this->getEbootPath().c_str(), TEX_TYPE_NONE
 																										#ifdef wagic
 																										, TEXTURE_FORMAT,
 																										mEboot->getPngData()
@@ -130,7 +130,12 @@ void YEntry::initDispName()
 	if (mEboot != NULL)
 	{
 		char* name = mEboot->getTitle();
-		if (name != NULL)	fName = name, done = true;
+		if (name != NULL)
+		{
+			fName = name;
+			SAFE_FREE(name);
+			done = true;
+		}
 	}
 
 	if (!done)

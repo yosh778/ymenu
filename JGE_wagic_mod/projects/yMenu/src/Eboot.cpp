@@ -18,12 +18,14 @@ Eboot::~Eboot()
 
 void Eboot::readEboot( string ebootPath )
 {
+	YLOG("Eboot::readEboot\n");
 	int eID = Lib::openFile( ebootPath );
 	
 	readOffsets( eID );
 	transOffsets( eID );
 	readPngData( eID );
 	getSfoData( eID );
+	YLOG("Eboot::readEboot done\n");
 }
 
 EbootSlot* Eboot::getSlot( int slot )
@@ -69,8 +71,10 @@ void Eboot::readPngData(int id)
 	if (mSlots[EBOOT_ICON0].size > 0)
 	{
 		mPngData = malloc(mSlots[EBOOT_ICON0].size);
+		YLOG("mPngData: 0x%08lX\n", mPngData);
 		sceIoLseek(id, mSlots[EBOOT_ICON0].offset, SEEK_SET);
 		sceIoRead(id, mPngData, mSlots[EBOOT_ICON0].size);
+		YLOG("mPngData done\n");
 	}
 	#endif
 }

@@ -22,26 +22,6 @@ GameApp::GameApp()
 #ifdef USE_TTF
 	mTTFont1 = NULL;
 #endif
-	/*FILE *f = fopen("t.sfo", "rb");
-	if ( f != NULL )
-	{
-		string title;
-		fseek(f, 0, SEEK_END);
-		int size = ftell(f);
-		fseek(f, 0, SEEK_SET);
-		void *buf = malloc(size);
-		fread(buf,size,1,f);
-		fclose(f);
-
-		Sfo test(buf);
-
-		char *res = (char*)test.getParamOffset(test.findValueIdx("TITLE"));
-		if ( (int)res > -1)
-			title = res;
-
-
-		SAFE_DELETE(buf);
-	}*/
 }
 
 
