@@ -6,6 +6,7 @@
 #include "DSystm.h"
 #include "Eboot.h"
 #include "GameApp.h"
+#include "YLaunch.h"
 
 enum {
 	NO_FILE, ZIP_FILE, RAR_FILE
@@ -13,7 +14,7 @@ enum {
 
 class Eboot;
 
-class YEntry
+class YEntry : public YLaunch
 {
 	friend class DSystm;
 	friend class YDir;
@@ -35,7 +36,7 @@ private:
 	bool mIsFolder;
 
 	bool containsEboot();
-	int findEboot();
+	bool findEboot();
 	int findArchive();
 	void initDispName();
 	void setFileType();

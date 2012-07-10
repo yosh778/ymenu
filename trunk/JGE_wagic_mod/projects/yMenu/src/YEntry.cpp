@@ -12,6 +12,7 @@ const string YEntry::ARCHIVE_EXTS[] = { "zip", "rar" };
 string YEntry::EBOOT_NAMES[] = EBOOTNAMES;
 
 YEntry::YEntry( SceIoDirent folderEntry )
+: YLaunch ( )
 {
 	mName = folderEntry.d_name;
 	mDispName = mName;
@@ -44,28 +45,47 @@ void YEntry::Create()
 	JRenderer* renderer = JRenderer::GetInstance();
 	
 	
-	if ( this->inHbPath() )
+	//if ( this->inHbPath() )
+	//{
+	this->findEboot();
+	
+	if ( this->containsEboot() )
 	{
-		this->findEboot();
-		if ( this->containsEboot() )
-		{
-			mEboot = new Eboot ( getEbootPath() );
+		mEboot = new Eboot ( getEbootPath() );
 
-			if (mEboot->getPngData() != NULL)
-			{
-				this->mIconTex = renderer->LoadTexture(this->getEbootPath().c_str(), TEX_TYPE_NONE
-																										#ifdef wagic
-																										, TEXTURE_FORMAT,
-																										mEboot->getPngData()
-																										#endif
-																										);
-				mEboot->freePngData();
-				
-				if ( mIconTex != NULL )	mIcon = new JQuad(mIconTex, 0, 0, mIconTex->mWidth, mIconTex->mHeight);
-				else	mIcon = DSystm::GetInstance()->getCorruptIcon();
-			}
-			else	this->mIcon =  DSystm::GetInstance()->getDefIcon();
+		if (mEboot->getPngData() != NULL)
+		{
+			this->mIconTex = renderer->LoadTexture(this->getEbootPath().c_str(), TEX_TYPE_NONE
+																									#ifdef wagic
+																									, TEXTURE_FORMAT,
+																									mEboot->getPngData()
+																									#endif
+																									);
+			mEboot->freePngData();
+			
+			if ( mIconTex != NULL )	mIcon = new JQuad(mIconTex, 0, 0, mIconTex->mWidth, mIconTex->mHeight);
+			else	mIcon = DSystm::GetInstance()->getCorruptIcon();
 		}
+		else	this->mIcon =  DSystm::GetInstance()->getDefIcon();
+		
+		
+		YLOG("setBootPath\n");
+		YLOG("%s\n",this->getEbootPath().c_str());
+		this->setBootPath( this->getEbootPath() );
+	
+	
+		YLOG("setAppType\n");
+		YLOG("%s\n",mEboot->getCategory());
+		
+		string category = mEboot->getCategory();
+		int appType = NO_APP;
+		if ( category == "ME" )	appType = POPS_APP;
+		else if ( category == "MG" )	appType = HOMEBREW_APP;
+		else if ( category == "EG" )	appType = PSN_APP;
+		
+		YLOG("type = %X\n",appType);
+		this->setAppType( appType );
+		
 	}
 	//else if (this->inSavePath())	this->findArchive();
 	
@@ -196,7 +216,7 @@ float YEntry::getZoom()
 }
 
 
-int YEntry::findEboot()
+bool YEntry::findEboot()
 {
 	bool done = false;
 	string cache;
@@ -240,7 +260,7 @@ int YEntry::findEboot()
 	sceIoDclose(id);
 	#endif
 
-	return 0;
+	return done;
 }
 
 

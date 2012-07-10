@@ -20,6 +20,7 @@ private:
 	int mEbootSize;
 	void* mPngData;
 	char* mTitle;
+	char* mCategory;
 
 	void readEboot( string ebootPath );
 	int readOffsets( int id );
@@ -36,6 +37,7 @@ public:
 	void* getPngData();
 	void freePngData();
 	char* getTitle();
+	char* getCategory();
 	unsigned int getPngSize();
 };
 

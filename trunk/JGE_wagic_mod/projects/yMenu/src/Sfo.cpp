@@ -94,3 +94,23 @@ char* Sfo::getTitle()
 	else	return NULL;
 }
 
+char* Sfo::getCategory()
+{
+	YLOG("getCategory\n");
+	int idx = this->findValueIdx("CATEGORY");
+	char *res = (char*)this->getParamOffset(idx);
+	YLOG("category: %X_=_",res);
+	YLOG("%s\n",res);
+	
+	if ( (int)res > -1)
+	{
+		// Copy category to new allocated space, as the sfo is gonna get freed
+		int len = mEntries[idx].minValSize + 1;
+		char *category = (char*)malloc( len );
+		strncpy(category, res, len);
+		
+		return category;
+	}
+	else	return NULL;
+}
+

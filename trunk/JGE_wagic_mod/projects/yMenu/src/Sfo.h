@@ -41,6 +41,7 @@ public:
 	int findValueIdx( string name );
 	void* getParamOffset( int paramIdx );
 	char* getTitle();
+	char* getCategory();
 	
 };
 

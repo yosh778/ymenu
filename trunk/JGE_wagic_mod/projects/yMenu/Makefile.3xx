@@ -1,5 +1,5 @@
 TARGET = yMenu
-OBJS = src/GameApp.o src/GameLauncher.o src/DSystm.o src/YEntry.o src/lib.o src/Eboot.o src/YDir.o src/Display.o src/Sfo.o
+OBJS = src/GameApp.o src/GameLauncher.o src/DSystm.o src/YEntry.o src/lib.o src/Eboot.o src/YDir.o src/Display.o src/Sfo.o src/YLaunch.o
 
 BUILD_PRX = 0
 PSP_FW_VERSION=660
@@ -11,7 +11,7 @@ ASFLAGS = $(CXXFLAGS)
 INCDIR = ../../JGE/include ../../JGE/src/zipFS ../../JGE/include/psp ../../JGE/include/psp/freetype2 ../../JGE/src ../../Boost ../../../libs/include
 LIBDIR = ../../JGE/lib/psp ../../../libs/lib
 LDFLAGS =
-LIBS = -lunziprar -ljge300 -lhgetools -lfreetype -lc -ljpeg -lgif -lpng -lz -lm -lmikmod -lpsppower -lpspmpeg -lpspaudiocodec -lpspaudiolib -lpspaudio -lpspmp3 -lpsprtc -lstdc++ -lpspfpu -lintrafont -lpspgum -lpspgu
+LIBS = -lpspsystemctrl_user -lunziprar -ljge300 -lhgetools -lfreetype -lc -ljpeg -lgif -lpng -lz -lm -lmikmod -lpsppower -lpspmpeg -lpspaudiocodec -lpspaudiolib -lpspaudio -lpspmp3 -lpsprtc -lstdc++ -lpspfpu -lintrafont -lpspgum -lpspgu
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = yMenu

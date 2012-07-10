@@ -13,6 +13,8 @@ class YEntry;
 
 class DSystm
 {
+	friend class GameApp;
+
 private:
 	YDir *mDir;
 	YDir *mOldDir;
