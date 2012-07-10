@@ -436,3 +436,15 @@ void DSystm::ChYDir( bool getParent )
 	}
 }
 
+YLaunch* DSystm::getCurApp()
+{
+	YEntry *entry = &mDir->mFolders[mDir->getCurFolder()];
+	YLaunch *app = NULL;
+	
+	if ( entry->mEboot != NULL )	app = entry->mEboot;
+	else	;
+	
+	
+	return app;
+}
+

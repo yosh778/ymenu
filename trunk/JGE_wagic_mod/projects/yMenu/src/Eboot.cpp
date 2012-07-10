@@ -3,6 +3,7 @@
 
 
 Eboot::Eboot( string ebootPath )
+: YLaunch ( )
 {
 	mPngData = NULL;
 	mTitle = NULL;
@@ -26,6 +27,7 @@ void Eboot::readEboot( string ebootPath )
 	transOffsets( eID );
 	readPngData( eID );
 	getSfoData( eID );
+	initEbootApp( ebootPath );
 	YLOG("Eboot::readEboot done\n");
 }
 
@@ -129,5 +131,26 @@ char* Eboot::getCategory()
 unsigned int Eboot::getPngSize()
 {
 	return mSlots[EBOOT_ICON0].size;
+}
+
+int Eboot::initEbootApp( string bootPath )
+{
+	int errCode;
+	
+	this->setBootPath( bootPath );
+	
+	
+	int appType = NO_APP;
+	string category = this->getCategory();
+	
+	if ( category == "ME" )	appType = POPS_APP;
+	else if ( category == "MG" )	appType = HOMEBREW_APP;
+	else if ( category == "EG" )	appType = PSN_APP;
+	
+	errCode = this->setAppType( appType );
+	
+	
+	
+	return errCode;
 }
 

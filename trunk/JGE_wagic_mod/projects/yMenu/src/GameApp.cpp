@@ -127,10 +127,7 @@ void GameApp::Destroy()
 	YLOG("copying eboot path: %s\n", dirSys->getEbootPath().c_str());
 	if (this->settings != NULL)	strcpy(this->settings->filename, dirSys->getEbootPath().c_str());
 	
-	int idx = dirSys->mDir->getCurFolder();
-	YEntry *yEntry = &dirSys->mDir->mFolders[idx];
-	
-	yEntry->launch();
+	dirSys->getCurApp()->launch();
 	
 #endif
 	

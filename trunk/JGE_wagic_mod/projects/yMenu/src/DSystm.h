@@ -6,6 +6,7 @@
 #include "lib.h"
 #include "YDir.h"
 #include "Display.h"
+#include "YLaunch.h"
 
 
 class YDir;
@@ -13,7 +14,6 @@ class YEntry;
 
 class DSystm
 {
-	friend class GameApp;
 
 private:
 	YDir *mDir;
@@ -81,6 +81,7 @@ public:
 	JQuad* getRarIcon();
 	JQuad* getZipIcon();
 	bool getOldMove();
+	YLaunch* getCurApp();
 };
 
 
