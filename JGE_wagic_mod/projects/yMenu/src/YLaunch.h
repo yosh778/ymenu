@@ -7,13 +7,6 @@
 enum appTypes_ {
 	NO_APP, HOMEBREW_APP, PSN_APP, POPS_APP, UNTOUCHED_ISO_APP, PATCHED_ISO_APP
 };
-/*
-
-CATEGORY == "ME"	// pops
-CATEGORY == "MG"	// homebrew
-CATEGORY == "EG"	// psn eboot
-
-*/
 
 
 class YLaunch

@@ -96,11 +96,11 @@ char* Sfo::getTitle()
 
 char* Sfo::getCategory()
 {
-	YLOG("getCategory\n");
+	//YLOG("getCategory\n");
 	int idx = this->findValueIdx("CATEGORY");
 	char *res = (char*)this->getParamOffset(idx);
-	YLOG("category: %X_=_",res);
-	YLOG("%s\n",res);
+	//YLOG("category: %X_=_",res);
+	//YLOG("%s\n",res);
 	
 	if ( (int)res > -1)
 	{
