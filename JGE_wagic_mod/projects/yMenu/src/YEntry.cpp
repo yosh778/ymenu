@@ -12,7 +12,6 @@ const string YEntry::ARCHIVE_EXTS[] = { "zip", "rar" };
 string YEntry::EBOOT_NAMES[] = EBOOTNAMES;
 
 YEntry::YEntry( SceIoDirent folderEntry )
-: YLaunch ( )
 {
 	mName = folderEntry.d_name;
 	mDispName = mName;
@@ -67,23 +66,6 @@ void YEntry::Create()
 			else	mIcon = DSystm::GetInstance()->getCorruptIcon();
 		}
 		else	this->mIcon =  DSystm::GetInstance()->getDefIcon();
-		
-		
-		
-		this->setBootPath( this->getEbootPath() );
-		
-	
-	
-		int appType = NO_APP;
-		string category = mEboot->getCategory();
-		
-		if ( category == "ME" )	appType = POPS_APP;
-		else if ( category == "MG" )	appType = HOMEBREW_APP;
-		else if ( category == "EG" )	appType = PSN_APP;
-		
-		
-		this->setAppType( appType );
-		
 	}
 	//else if (this->inSavePath())	this->findArchive();
 	

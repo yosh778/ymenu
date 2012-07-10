@@ -5,6 +5,7 @@
 #include "common.h"
 #include "lib.h"
 #include "Sfo.h"
+#include "YLaunch.h"
 
 
 enum eboot_slots_ {
@@ -12,7 +13,7 @@ enum eboot_slots_ {
 };
 
 
-class Eboot
+class Eboot : public YLaunch
 {
 
 private:
@@ -27,6 +28,7 @@ private:
 	void readPngData(int id);
 	void transOffsets( int id );
 	void getSfoData(int id);
+	int initEbootApp( string bootPath );
 	
 public:
 	

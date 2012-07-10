@@ -14,7 +14,7 @@ enum {
 
 class Eboot;
 
-class YEntry : public YLaunch
+class YEntry
 {
 	friend class DSystm;
 	friend class YDir;

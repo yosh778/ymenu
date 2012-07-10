@@ -10,7 +10,6 @@ class YEntry;
 
 class YDir
 {
-	friend class GameApp;
 	friend class DSystm;
 
 private:
