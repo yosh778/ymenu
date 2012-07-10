@@ -31,6 +31,10 @@
 #include <pspiofilemgr.h>
 #include <pspiofilemgr_dirent.h>
 #include <psppower.h>
+#include <psploadexec_kernel.h>
+#include <pspinit.h>
+#include <pspsystemctrl_user.h>
+#define PSP_INIT_APITYPE_UMDEMU_MS 0x123
 #define abs(a) fabs(a)	// avoids float bugs
 #define DO_EXIT sceKernelExitGame
 

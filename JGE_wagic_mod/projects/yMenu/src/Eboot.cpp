@@ -93,6 +93,7 @@ void Eboot::getSfoData(int id)
 		
 		Sfo sfo(sfoData);
 		mTitle = sfo.getTitle();
+		mCategory = sfo.getCategory();
 		
 		SAFE_FREE(sfoData);
 	}
@@ -115,6 +116,12 @@ void* Eboot::getPngData()
 char* Eboot::getTitle()
 {
 	return mTitle;
+}
+
+
+char* Eboot::getCategory()
+{
+	return mCategory;
 }
 
 
