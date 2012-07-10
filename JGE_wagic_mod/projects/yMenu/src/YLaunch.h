@@ -24,21 +24,21 @@ private:
 	
 	int setRunlevel( int runlevel );
 	int getRunlevel();
+	void setBootPath( string bootPath );
+	string getBootPath();
 	
 	
 public:
-	YLaunch(  );
+	YLaunch( string bootPath );
 	~YLaunch();
 	
 	int launch();
-	void setBootPath( string bootPath );
-	string getBootPath();
 	int getAppType();
 	int setAppType( int appType );
 	virtual string getTitle() = 0;
 	virtual void* getPngData() = 0;
 	virtual void freePngData() = 0;
-	virtual int appInit( string bootPath ) = 0;
+	virtual int appInit() = 0;
 	
 };
 

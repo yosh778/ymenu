@@ -20,7 +20,7 @@ public:
 	static bool isISO ( string filePath );
 	void* getPngData();
 	void freePngData();
-	int appInit( string bootPath );
+	int appInit();
 };
 
 

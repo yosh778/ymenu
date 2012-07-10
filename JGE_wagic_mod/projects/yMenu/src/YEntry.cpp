@@ -56,7 +56,7 @@ void YEntry::Create()
 		else if ( mFileType == ISO_FILE )	mApp = new YISO ( getAppPath() );
 		else if ( mFileType == CSO_FILE )	mApp = new YCSO ( getAppPath() );
 		
-		mApp->appInit( getAppPath() );
+		mApp->appInit();
 		
 
 		if (mApp->getPngData() != NULL)

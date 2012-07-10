@@ -40,7 +40,7 @@ public:
 	string getTitle();
 	char* getCategory();
 	unsigned int getPngSize();
-	int appInit( string bootPath );
+	int appInit();
 };
 
 

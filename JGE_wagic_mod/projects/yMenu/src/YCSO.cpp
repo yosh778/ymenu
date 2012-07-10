@@ -3,7 +3,7 @@
 
 
 YCSO::YCSO( string csoPath )
-: YLaunch ( )
+: YLaunch ( csoPath )
 {
 	mPngData = NULL;
 }
@@ -67,11 +67,9 @@ string YCSO::getTitle()
 	return "";
 }
 
-int YCSO::appInit( string bootPath )
+int YCSO::appInit()
 {
 	int errCode;
-	
-	this->setBootPath( bootPath );
 	
 	
 	int appType = UNTOUCHED_ISO_APP;//NO_APP;

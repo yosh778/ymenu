@@ -3,7 +3,7 @@
 
 
 YISO::YISO( string isoPath )
-: YLaunch ( )
+: YLaunch ( isoPath )
 {
 	mPngData = NULL;
 }
@@ -71,11 +71,9 @@ string YISO::getTitle()
 	return "";
 }
 
-int YISO::appInit( string bootPath )
+int YISO::appInit()
 {
 	int errCode;
-	
-	this->setBootPath( bootPath );
 	
 	
 	int appType = UNTOUCHED_ISO_APP;//NO_APP;
