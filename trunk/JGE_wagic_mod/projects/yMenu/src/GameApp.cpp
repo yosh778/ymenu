@@ -124,8 +124,8 @@ void GameApp::Destroy()
 	DSystm* dirSys = DSystm::GetInstance();
 	YLOG("quit ymenu requested\n");
 #ifdef PSP
-	YLOG("copying eboot path: %s\n", dirSys->getEbootPath().c_str());
-	if (this->settings != NULL)	strcpy(this->settings->filename, dirSys->getEbootPath().c_str());
+	YLOG("copying eboot path: %s\n", dirSys->getAppPath().c_str());
+	if (this->settings != NULL)	strcpy(this->settings->filename, dirSys->getAppPath().c_str());
 	
 	dirSys->getCurApp()->launch();
 	

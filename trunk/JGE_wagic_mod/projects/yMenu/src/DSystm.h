@@ -18,7 +18,7 @@ class DSystm
 private:
 	YDir *mDir;
 	YDir *mOldDir;
-	string mEbootPath;
+	string mAppPath;
 	JTexture* mFolderIconTex;
 	JQuad* mFolderIcon;
 	JTexture* mDefIconTex;
@@ -71,9 +71,9 @@ public:
 	void update();
 	void ChYDir( bool getParent );
 	void setWorkPath( string workPath );
-	void setEbootPath( string ebootPath );
+	void setAppPath( string ebootPath );
 	string getWorkPath();
-	string getEbootPath();
+	string getAppPath();
 	JQuad* getDefIcon();
 	JQuad* getFolderIcon();
 	JQuad* getCorruptIcon();

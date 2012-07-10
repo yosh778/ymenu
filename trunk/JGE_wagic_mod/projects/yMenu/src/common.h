@@ -19,6 +19,7 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <typeinfo>
 
 
 //#define YDEBUG

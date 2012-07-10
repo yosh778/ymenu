@@ -24,7 +24,7 @@ DSystm::DSystm(
 	mFileIcon = NULL;
 	mRarIcon = NULL;
 	mZipIcon = NULL;
-	setEbootPath( "quit" );
+	setAppPath( "quit" );
 	mFont = font;
 	mClic = NULL;
 	mDir = NULL;
@@ -120,6 +120,7 @@ int DSystm::readDir()
 		tmpName = tmpName.substr(tmpName.size()-3, 3);
 		
 		if ( tmpName == YEntry::ARCHIVE_EXTS[0] || tmpName == YEntry::ARCHIVE_EXTS[1] \
+			|| tmpName == "iso" || tmpName == "cso" \
 			|| (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR)
 		{
 			YEntry yEntry((*dir)[i]);
@@ -197,9 +198,9 @@ void DSystm::setWorkPath( string workPath )
 	}
 }
 
-void DSystm::setEbootPath( string ebootPath )
+void DSystm::setAppPath( string appPath )
 {
-	mEbootPath = ebootPath;
+	mAppPath = appPath;
 }
 
 string DSystm::getWorkPath()
@@ -207,9 +208,9 @@ string DSystm::getWorkPath()
 	return DSystm::mWorkPath;
 }
 
-string DSystm::getEbootPath()
+string DSystm::getAppPath()
 {
-	return mEbootPath;
+	return mAppPath;
 }
 
 void DSystm::update()
@@ -286,9 +287,9 @@ void DSystm::update()
 			)
 		{
 			// If we want to start homebrew
-			if ( mDir->mFolders[mDir->mCurFolder].isHomebrew() )
+			if ( mDir->mFolders[mDir->mCurFolder].isApp() )
 			{
-				setEbootPath( mDir->mFolders[mDir->mCurFolder].getEbootPath() );
+				setAppPath( mDir->mFolders[mDir->mCurFolder].getAppPath() );
 				engine->End();
 				YLOG("Start homebrew requested\n");
 				return;
@@ -322,7 +323,7 @@ void DSystm::update()
 					|| engine->GetButtonClick(PSP_CTRL_DOWN) \
 					/*|| engine->GetAnalogY() > 255-80*/) \
 					&& (mDir->mCurFolder < mDir->mFolders.size()) \
-					&& !mDir->mFolders[mDir->mCurFolder].isHomebrew() \
+					&& !mDir->mFolders[mDir->mCurFolder].isApp() \
 					&& mDir->mFolders[mDir->mCurFolder].IsFolder() \
 					&& !action_done )
 			{
@@ -438,13 +439,6 @@ void DSystm::ChYDir( bool getParent )
 
 YLaunch* DSystm::getCurApp()
 {
-	YEntry *entry = &mDir->mFolders[mDir->getCurFolder()];
-	YLaunch *app = NULL;
-	
-	if ( entry->mEboot != NULL )	app = entry->mEboot;
-	else	;
-	
-	
-	return app;
+	return mDir->mFolders[mDir->getCurFolder()].mApp;
 }
 

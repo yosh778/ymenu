@@ -7,9 +7,11 @@
 #include "Eboot.h"
 #include "GameApp.h"
 #include "YLaunch.h"
+#include "YISO.h"
+#include "YCSO.h"
 
 enum {
-	NO_FILE, ZIP_FILE, RAR_FILE
+	NO_FILE, ZIP_FILE, RAR_FILE, ISO_FILE, CSO_FILE
 };
 
 class Eboot;
@@ -24,14 +26,14 @@ private:
 	string mName;
 	string mDispName;
 	Coord mPos;
-	bool mIsHomebrew;
+	bool mIsApp;
 	JTexture* mIconTex;
 	JQuad* mIcon;
 	string mEbootName;
 	string mArchiveName;
 	float mZoom;
-	Eboot *mEboot;
-	int mArchiveType;
+	YLaunch *mApp;
+	int mFileType;
 	bool mEbootExists;
 	bool mIsFolder;
 
@@ -40,6 +42,7 @@ private:
 	int findArchive();
 	void initDispName();
 	void setFileType();
+	void checkBackup();
 	
 	
 public:
@@ -61,11 +64,11 @@ public:
 	string getPathName();
 	string getRealName();
 	string getDispName();
-	string getEbootPath();
+	string getAppPath();
 	string getArchivePath();
 	bool inHbPath();
 	bool inSavePath();
-	bool isHomebrew();
+	bool isApp();
 	Coord& getPos();
 	float getZoom();
 	void setZoom ( float zoom );
