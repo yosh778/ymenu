@@ -69,21 +69,19 @@ void YEntry::Create()
 		else	this->mIcon =  DSystm::GetInstance()->getDefIcon();
 		
 		
-		YLOG("setBootPath\n");
-		YLOG("%s\n",this->getEbootPath().c_str());
-		this->setBootPath( this->getEbootPath() );
-	
-	
-		YLOG("setAppType\n");
-		YLOG("%s\n",mEboot->getCategory());
 		
-		string category = mEboot->getCategory();
+		this->setBootPath( this->getEbootPath() );
+		
+	
+	
 		int appType = NO_APP;
+		string category = mEboot->getCategory();
+		
 		if ( category == "ME" )	appType = POPS_APP;
 		else if ( category == "MG" )	appType = HOMEBREW_APP;
 		else if ( category == "EG" )	appType = PSN_APP;
 		
-		YLOG("type = %X\n",appType);
+		
 		this->setAppType( appType );
 		
 	}

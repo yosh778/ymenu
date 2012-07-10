@@ -13,6 +13,7 @@ Eboot::Eboot( string ebootPath )
 
 Eboot::~Eboot()
 {
+	SAFE_FREE(mCategory);
 	SAFE_FREE(mTitle);
 }
 
