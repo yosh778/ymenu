@@ -28,7 +28,6 @@ private:
 	void readPngData(int id);
 	void transOffsets( int id );
 	void getSfoData(int id);
-	int initEbootApp( string bootPath );
 	
 public:
 	
@@ -38,9 +37,10 @@ public:
 	EbootSlot* getSlot( int slot );
 	void* getPngData();
 	void freePngData();
-	char* getTitle();
+	string getTitle();
 	char* getCategory();
 	unsigned int getPngSize();
+	int appInit( string bootPath );
 };
 
 

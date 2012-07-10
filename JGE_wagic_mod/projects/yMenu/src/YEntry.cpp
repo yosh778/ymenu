@@ -17,11 +17,11 @@ YEntry::YEntry( SceIoDirent folderEntry )
 	mDispName = mName;
 	mIconTex = NULL;
 	mIcon = NULL;
-	mIsHomebrew = false;
+	mIsApp = false;
 	mEbootName = "";
 	mZoom = YEntry::DEF_ZOOM;
-	mEboot = NULL;
-	mArchiveType = NO_FILE;
+	mApp = NULL;
+	mFileType = NO_FILE;
 	mEbootExists = false;
 	
 	if (folderEntry.d_stat.st_attr & FIO_SO_IFDIR && folderEntry.d_stat.st_mode & FIO_S_IFDIR)
@@ -46,21 +46,28 @@ void YEntry::Create()
 	
 	//if ( this->inHbPath() )
 	//{
-	this->findEboot();
+	if ( mFileType == ISO_FILE || mFileType == CSO_FILE )	this->checkBackup();
+	else	this->findEboot();
 	
-	if ( this->containsEboot() )
+	
+	if ( this->containsEboot() || mFileType == ISO_FILE || mFileType == CSO_FILE )
 	{
-		mEboot = new Eboot ( getEbootPath() );
+		if ( this->containsEboot() )	mApp = new Eboot ( getAppPath() );
+		else if ( mFileType == ISO_FILE )	mApp = new YISO ( getAppPath() );
+		else if ( mFileType == CSO_FILE )	mApp = new YCSO ( getAppPath() );
+		
+		mApp->appInit( getAppPath() );
+		
 
-		if (mEboot->getPngData() != NULL)
+		if (mApp->getPngData() != NULL)
 		{
-			this->mIconTex = renderer->LoadTexture(this->getEbootPath().c_str(), TEX_TYPE_NONE
+			this->mIconTex = renderer->LoadTexture(this->getAppPath().c_str(), TEX_TYPE_NONE
 																									#ifdef wagic
 																									, TEXTURE_FORMAT,
-																									mEboot->getPngData()
+																									mApp->getPngData()
 																									#endif
 																									);
-			mEboot->freePngData();
+			mApp->freePngData();
 			
 			if ( mIconTex != NULL )	mIcon = new JQuad(mIconTex, 0, 0, mIconTex->mWidth, mIconTex->mHeight);
 			else	mIcon = DSystm::GetInstance()->getCorruptIcon();
@@ -98,7 +105,7 @@ void YEntry::Destroy()
 		mIcon != dirSys->getZipIcon())
 		SAFE_DELETE(mIcon);
 	
-	SAFE_DELETE(mEboot);
+	SAFE_DELETE(mApp);
 }
 
 
@@ -107,9 +114,14 @@ string YEntry::getPathName()
 	return DSystm::GetInstance()->getWorkPath() + this->mName;
 }
 
-string YEntry::getEbootPath()
+string YEntry::getAppPath()
 {
-	return this->getPathName()+"/"+this->mEbootName;
+	string appPath = this->getPathName();
+	
+	if ( this->containsEboot() )//if ( mApp != NULL )typeid(*mApp) == typeid(Eboot) )
+			appPath += "/"+this->mEbootName;
+	
+	return appPath;
 }
 
 string YEntry::getArchivePath()
@@ -127,14 +139,10 @@ void YEntry::initDispName()
 	string fName;
 	bool done = false;
 	
-	if (mEboot != NULL)
+	if (mApp != NULL)
 	{
-		char* name = mEboot->getTitle();
-		if (name != NULL)
-		{
-			fName = name;
-			done = true;
-		}
+		fName = mApp->getTitle();
+		if (fName != "")	done = true;
 	}
 
 	if (!done)
@@ -170,12 +178,12 @@ bool YEntry::inSavePath()
 	else return false;
 }
 
-bool YEntry::isHomebrew()
+bool YEntry::isApp()
 {
-	if ( mEboot != NULL && inHbPath() )
-		this->mIsHomebrew = true;
+	if ( mApp != NULL/* && inHbPath()*/ )
+		this->mIsApp = true;
 	
-	return this->mIsHomebrew;
+	return this->mIsApp;
 }
 
 Coord& YEntry::getPos()
@@ -273,13 +281,13 @@ int YEntry::findArchive()
 			//YLOG("%s == %s ?\n",cache[0].c_str(),temp.c_str());
 			if ( cache == temp )
 			{
-				if (i)	mArchiveType = RAR_FILE;
-				else	mArchiveType = ZIP_FILE;
+				if (i)	mFileType = RAR_FILE;
+				else	mFileType = ZIP_FILE;
 				mArchiveName = entry.d_name;
 
 				done = true;
 				//YLOG("entry.d_name: %s\n",entry.d_name);
-				//YLOG("mArchiveName: %s, mArchiveType: %i\n",mArchiveName.c_str(), mArchiveType);
+				//YLOG("mArchiveName: %s, mFileType: %i\n",mArchiveName.c_str(), mFileType);
 			}
 		}
 		
@@ -308,7 +316,7 @@ void YEntry::updateAlpha( float intensity )
 
 int YEntry::getArchiveType()
 {
-	return mArchiveType;
+	return mFileType;
 }
 
 
@@ -325,9 +333,27 @@ void YEntry::setFileType()
 	
 	tmpName = tmpName.substr(tmpName.size()-3, 3);
 	
-	if ( tmpName == YEntry::ARCHIVE_EXTS[0] )	mArchiveType = ZIP_FILE;
-	else	if ( tmpName == YEntry::ARCHIVE_EXTS[1] )	mArchiveType = RAR_FILE;
+	if ( tmpName == YEntry::ARCHIVE_EXTS[0] )	mFileType = ZIP_FILE;
+	else	if ( tmpName == YEntry::ARCHIVE_EXTS[1] )	mFileType = RAR_FILE;
+	else	if ( tmpName == "iso" )	mFileType = ISO_FILE;
+	else	if ( tmpName == "cso" )	mFileType = CSO_FILE;
 	
-	YLOG("%s %s's fileType = %i\n", tmpName.c_str(), mName.c_str(), mArchiveType);
+	YLOG("%s %s's fileType = %i\n", tmpName.c_str(), mName.c_str(), mFileType);
 }
+
+void YEntry::checkBackup()
+{
+	// If is a backup & hex check fails, invalidate file
+	
+	if ( mFileType == ISO_FILE )
+	{
+		if ( !YISO::isISO(this->getAppPath()) )	mFileType = NO_FILE;
+	}
+	else if ( mFileType == CSO_FILE )
+	{
+		if ( !YCSO::isCSO(this->getAppPath()) )	mFileType = NO_FILE;
+	}
+	
+}
+
 

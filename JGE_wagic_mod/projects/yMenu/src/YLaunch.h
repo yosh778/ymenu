@@ -35,6 +35,10 @@ public:
 	string getBootPath();
 	int getAppType();
 	int setAppType( int appType );
+	virtual string getTitle() = 0;
+	virtual void* getPngData() = 0;
+	virtual void freePngData() = 0;
+	virtual int appInit( string bootPath ) = 0;
 	
 };
 

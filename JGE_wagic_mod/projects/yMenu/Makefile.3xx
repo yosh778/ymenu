@@ -1,11 +1,11 @@
 TARGET = yMenu
-OBJS = src/GameApp.o src/GameLauncher.o src/DSystm.o src/YEntry.o src/lib.o src/Eboot.o src/YDir.o src/Display.o src/Sfo.o src/YLaunch.o
+OBJS = src/GameApp.o src/GameLauncher.o src/DSystm.o src/YEntry.o src/lib.o src/Eboot.o src/YDir.o src/Display.o src/Sfo.o src/YLaunch.o src/YISO.o src/YCSO.o
 
 BUILD_PRX = 0
 PSP_FW_VERSION=660
 
 CFLAGS = -O2 -G0 -Wall -DDEVHOOK -DPSPFW3XX
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+CXXFLAGS = $(CFLAGS) -fno-exceptions
 ASFLAGS = $(CXXFLAGS)
 
 INCDIR = ../../JGE/include ../../JGE/src/zipFS ../../JGE/include/psp ../../JGE/include/psp/freetype2 ../../JGE/src ../../Boost ../../../libs/include

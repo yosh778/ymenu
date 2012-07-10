@@ -7,7 +7,7 @@ Eboot::Eboot( string ebootPath )
 {
 	mPngData = NULL;
 	mTitle = NULL;
-	
+	YLOG("ebootPath: %s\n", ebootPath.c_str());
 	readEboot( ebootPath );
 	
 }
@@ -27,7 +27,6 @@ void Eboot::readEboot( string ebootPath )
 	transOffsets( eID );
 	readPngData( eID );
 	getSfoData( eID );
-	initEbootApp( ebootPath );
 	YLOG("Eboot::readEboot done\n");
 }
 
@@ -116,9 +115,10 @@ void* Eboot::getPngData()
 }
 
 
-char* Eboot::getTitle()
+string Eboot::getTitle()
 {
-	return mTitle;
+	if (mTitle == NULL)	return "";
+	else	return mTitle;
 }
 
 
@@ -133,7 +133,7 @@ unsigned int Eboot::getPngSize()
 	return mSlots[EBOOT_ICON0].size;
 }
 
-int Eboot::initEbootApp( string bootPath )
+int Eboot::appInit( string bootPath )
 {
 	int errCode;
 	
