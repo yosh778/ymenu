@@ -3,7 +3,7 @@
 
 
 Eboot::Eboot( string ebootPath )
-: YLaunch ( )
+: YLaunch ( ebootPath )
 {
 	mPngData = NULL;
 	mTitle = NULL;
@@ -133,11 +133,9 @@ unsigned int Eboot::getPngSize()
 	return mSlots[EBOOT_ICON0].size;
 }
 
-int Eboot::appInit( string bootPath )
+int Eboot::appInit()
 {
 	int errCode;
-	
-	this->setBootPath( bootPath );
 	
 	
 	int appType = NO_APP;

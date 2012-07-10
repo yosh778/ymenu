@@ -2,10 +2,10 @@
 #include "YLaunch.h"
 
 
-YLaunch::YLaunch(  )
+YLaunch::YLaunch( string bootPath )
 {
 	mAppType = NO_APP;
-	mBootPath = "";
+	this->setBootPath( bootPath );
 	mEbootPath = "";
 	mRunlevel = -1;
 	
