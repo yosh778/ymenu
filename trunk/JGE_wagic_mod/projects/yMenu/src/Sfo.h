@@ -14,10 +14,15 @@ typedef struct {
 	u32 nbEntries;
 } sfo_header;
 
+
+enum sfo_param_type {
+	SFO_STRING = 2, SFO_VAL = 4
+};
+
 typedef struct {
 	u16 valOffset;
-	u8 unknown0;
-	u8 unknown1;
+	u8 unknown0;	// always 0x4
+	u8 type;	// sfo_param_type
 	u32 minValSize;
 	u32 maxValSize;
 	u32 paramOffset;
