@@ -9,6 +9,9 @@ class YISO : public YLaunch
 {
 
 private:
+	
+
+protected:
 	void* mPngData;
 	
 	
@@ -16,11 +19,12 @@ public:
 	YISO( string isoPath );
 	~YISO();
 	
-	string getTitle();
+	virtual string getTitle();
+	virtual void* getPngData();
+	virtual void freePngData();
+	virtual int appInit();
+	
 	static bool isISO ( string filePath );
-	void* getPngData();
-	void freePngData();
-	int appInit();
 };
 
 

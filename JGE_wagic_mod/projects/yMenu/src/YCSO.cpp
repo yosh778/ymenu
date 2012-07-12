@@ -3,7 +3,7 @@
 
 
 YCSO::YCSO( string csoPath )
-: YLaunch ( csoPath )
+: YISO ( csoPath )
 {
 	mPngData = NULL;
 }
@@ -49,39 +49,6 @@ bool YCSO::isCSO ( string filePath )
 	
 	// Return Result
 	return result;
-}
-
-void YCSO::freePngData()
-{
-	SAFE_FREE(mPngData);
-}
-
-
-void* YCSO::getPngData()
-{
-	return mPngData;
-}
-
-string YCSO::getTitle()
-{
-	return "";
-}
-
-int YCSO::appInit()
-{
-	int errCode;
-	
-	
-	int appType = UNTOUCHED_ISO_APP;//NO_APP;
-	
-	//if ( untouched )	appType = UNTOUCHED_ISO_APP;
-	//else if ( patched )	appType = PATCHED_ISO_APP;
-	
-	errCode = this->setAppType( appType );
-	
-	
-	
-	return errCode;
 }
 
 
