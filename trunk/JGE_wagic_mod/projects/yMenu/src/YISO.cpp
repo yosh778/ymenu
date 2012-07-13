@@ -2,6 +2,10 @@
 #include "YISO.h"
 
 
+unsigned YISO::SECTOR_SIZE = 0x800;
+
+
+
 YISO::YISO( string isoPath )
 : YLaunch ( isoPath )
 {
@@ -86,6 +90,26 @@ int YISO::appInit()
 	
 	
 	return errCode;
+}
+
+bool YISO::open( string path )
+{
+	mFin.open(path.c_str(),std::ios::binary);
+	
+	return mFin.is_open();
+}
+
+int YISO::readSector( char *destBuf, unsigned sector )
+{
+	mFin.seekg(sector*YISO::SECTOR_SIZE, ios::beg);
+	mFin.read(destBuf, YISO::SECTOR_SIZE);
+	
+	return YISO::SECTOR_SIZE;
+}
+
+void YISO::close()
+{
+	mFin.close();
 }
 
 

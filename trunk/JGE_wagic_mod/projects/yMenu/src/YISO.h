@@ -12,10 +12,18 @@ private:
 	
 
 protected:
+	ifstream mFin;
 	void* mPngData;
+	
+	virtual bool open( string path );
+	virtual int readSector( char *destBuf, unsigned sector );
+	virtual void close();
 	
 	
 public:
+	static unsigned SECTOR_SIZE;
+	
+
 	YISO( string isoPath );
 	~YISO();
 	
