@@ -126,6 +126,8 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 			int zErr = 0;
 			
 			
+			// Special thanks to PicoDrive 135 source for the inflate code sample used with CSO
+			
 			z_stream stream;
 			int err;
 
@@ -142,7 +144,8 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 			{
 				err = inflate(&stream, Z_FINISH);
 				if (err != Z_STREAM_END)	zErr = -2;
-				//*destLen = stream.total_out;
+				
+				
 				decLen = stream.total_out;
 
 				inflateEnd(&stream);
