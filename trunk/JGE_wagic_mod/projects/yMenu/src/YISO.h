@@ -21,7 +21,7 @@ protected:
 	
 	
 public:
-	static unsigned SECTOR_SIZE;
+	static const unsigned SECTOR_SIZE;
 	
 
 	YISO( string isoPath );

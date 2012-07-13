@@ -2,7 +2,7 @@
 #include "YISO.h"
 
 
-unsigned YISO::SECTOR_SIZE = 0x800;
+const unsigned YISO::SECTOR_SIZE = 0x800;
 
 
 
