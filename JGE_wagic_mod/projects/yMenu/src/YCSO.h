@@ -34,7 +34,6 @@ class YCSO : public YISO
 private:
 	CISOHeader mHead;
 	unsigned mTotalBlock;
-	vector<int> mIndexBuf;
 	
 	bool initDecompress();
 	virtual int readSector( char *destBuf, unsigned sector );
@@ -44,7 +43,6 @@ public:
 	YCSO( string csoPath );
 	~YCSO();
 	
-	void finishDecompress();
 	static bool isCSO ( string filePath );
 };
 

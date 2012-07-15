@@ -24,12 +24,19 @@ protected:
 	virtual int readSector( char *destBuf, unsigned sector );
 	void* read( u32 sector, u32 len );
 	virtual void close();
+	
+	
 	void processPathTable( PathTableRecord* pathTable, u32 pathTableSize );
-	virtual u16 findDirPathTable( string dirPath, u16 parent = 1 );
-	void readPathTable();
-	vector<DirectoryRecord*>* getDir( DirectoryRecord* dir );
+	
+	u16 findDirPathTable( string dirPath, u16 parent = 1 );
 	DirectoryRecord* findFile( string fileName, DirectoryRecord* dir );
+	
+	vector<DirectoryRecord*>* getDir( DirectoryRecord* dir );
 	void* getFile( DirectoryRecord* fileRecord );
+	
+	
+	
+	static u32 lba2Pos( u32 lba );
 	
 	
 public:
@@ -37,7 +44,7 @@ public:
 	
 
 	YISO( string isoPath );
-	~YISO();
+	virtual ~YISO();
 	
 	virtual string getTitle();
 	virtual void* getPngData();
@@ -46,7 +53,6 @@ public:
 	void Create();
 	
 	static bool isISO ( string filePath );
-	static u32 lba2Pos( u32 lba );
 };
 
 
