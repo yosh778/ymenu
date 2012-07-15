@@ -329,6 +329,7 @@ void YISO::Create()
 			}
 			YLOG("read done\n");
 			SAFE_FREE(pathTableBuf);
+			mPathTable.clear();
 		}
 		else	YLOG("Read error: %X\n", err);
 		
