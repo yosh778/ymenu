@@ -22,7 +22,7 @@ const int YDir::SLIDE_STEP_Y = 6;
 map<string,int> YDir::mDirIdxs;
 
 
-YDir::YDir( bool isParent )
+YDir::YDir()
 {
 	mSlideOut = false;
 	mCurFolder = 0;
@@ -36,12 +36,6 @@ YDir::YDir( bool isParent )
 	mCurInterToCross = 0;
 	mInterToCross = 0;
 	mInterOffset = 0;
-
-	int slideInY;
-	if (isParent)	slideInY = YDir::MIN_FOLDER_Y;
-	else	slideInY = YDir::MAX_FOLDER_Y;
-
-	initSlideY( slideInY, YEntry::yFolders );
 }
 
 YDir::~YDir()
@@ -50,14 +44,23 @@ YDir::~YDir()
 	mDirIdxs[mCurDir] = mCurFolder;
 }
 
-void YDir::Create()
+void YDir::Create( string deadChild, bool init )
 {
+	int slideInY;
+	if (deadChild != "" || init)	slideInY = YDir::MIN_FOLDER_Y;
+	else	slideInY = YDir::MAX_FOLDER_Y;
+
+	initSlideY( slideInY, YEntry::yFolders );
+	
+	
 	YLOG("YDir::Create\n");
 	for ( int i=0; i< mFolders.size(); ++i )
 		mFolders[i].Create();
 
 	mCurDir = DSystm::GetInstance()->getWorkPath();
-	restoreCurDirIdx();
+	
+	initCurDirIdx( deadChild );
+	
 
 	if (mCurFolder < mFolders.size())
 	{
@@ -470,15 +473,15 @@ vector<string>* YDir::getDirNames( string dirpath, enum name_formats_ format )
 #endif
 
 
-void YDir::restoreCurDirIdx()
+bool YDir::restoreCurDirIdx()
 {
+	bool found = false;
 	map<string,int>::iterator it = mDirIdxs.find(mCurDir);
 
-	if ( it != mDirIdxs.end() )	mCurFolder = it->second;
-	else	mCurFolder = 0;
-
+	if ( it != mDirIdxs.end() )	mCurFolder = it->second, found = true;
 	
-	initOffsetX();
+	
+	return found;
 }
 
 // Calcs offset to avoid storing it in our mDirIdxs map
@@ -487,4 +490,29 @@ void YDir::initOffsetX()
 	mOffset.x = -1*mCurFolder*(DEFAULT_ICON_W/2 + YEntry::MinInterX);
 	if ( mCurFolder > 0 )	mOffset.x-= YEntry::interX-YEntry::MinInterX;
 }
+
+bool YDir::initCurDirIdx( string deadChild )
+{
+	bool success = true;
+	
+	
+	if ( !restoreCurDirIdx() && deadChild != "" )
+		if ( !findChildIdx(deadChild) )	success = false;
+	
+	initOffsetX();
+	
+	
+	return success;
+}
+
+bool YDir::findChildIdx( string deadChild )
+{
+	bool found = false;
+	
+	for (int i=0; !found && i<mFolders.size(); ++i )
+		if ( mFolders[i].getRealName() == deadChild )	mCurFolder = i, found = true;
+	
+	return found;
+}
+
 

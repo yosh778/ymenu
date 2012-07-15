@@ -35,8 +35,10 @@ private:
 	int mFirstRush;
 	bool mDoRush;
 
-	void restoreCurDirIdx();
+	bool restoreCurDirIdx();
 	void updateLogicPosX();
+	bool initCurDirIdx( string deadChild );
+	bool findChildIdx( string deadChild );
 	
 public:
 	static const int SLIDE_STEP_X;
@@ -48,9 +50,9 @@ public:
 	static const int MIN_FOLDER_Y;
 	static const int MAX_FOLDER_Y;
 
-	YDir( bool isParent );
+	YDir();
 	~YDir();
-	void Create();
+	void Create( string deadChild = "", bool init = false );
 	void Destroy();
 
 	void update();

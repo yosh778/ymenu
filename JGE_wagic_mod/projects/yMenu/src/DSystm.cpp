@@ -70,9 +70,9 @@ void DSystm::Create( string workPath )
 	mClic = JSoundSystem::GetInstance()->LoadSample("s.wav");
 
 
-	mDir = new YDir( true );
+	mDir = new YDir();
 	setWorkPath( workPath );
-	mDir->Create();
+	mDir->Create( "", true );
 }
 
 void DSystm::Destroy()
@@ -429,11 +429,21 @@ void DSystm::ChYDir( bool getParent )
 
 
 		mOldDir = mDir;
-		mDir = new YDir( getParent );
+		mDir = new YDir();
+
+		string deadChild;
+		if ( getParent )
+		{
+			int pos = mWorkPath.rfind('/', mWorkPath.size()-2 )+1;
+			deadChild = mWorkPath.substr( pos, mWorkPath.size()-pos-1 );
+			YLOG("%X\n", mWorkPath.size()-pos-1 );
+		}
+		else	deadChild = "";
+		YLOG("mWorkPath: %s, deadChild: %s, %X\n", mWorkPath.c_str(), deadChild.c_str(), mWorkPath.rfind('/', mWorkPath.size()-2 ));
 
 		setWorkPath( workpath );
-
-		mDir->Create();
+		
+		mDir->Create( deadChild );
 	}
 }
 

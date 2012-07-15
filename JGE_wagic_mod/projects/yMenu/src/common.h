@@ -24,7 +24,10 @@
 #include <typeinfo>
 
 
+
 //#define YDEBUG
+//#define VHBL
+
 
 #define FATAL_ERROR(...) DO_EXIT()
 #define YLOG(...) ;
