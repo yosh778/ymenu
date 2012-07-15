@@ -56,6 +56,7 @@ bool YCSO::isCSO ( string filePath )
 
 bool YCSO::initDecompress()
 {
+	YLOG("YCSO::initDecompress\n");
 	bool success = true;
 	
 	
@@ -65,30 +66,26 @@ bool YCSO::initDecompress()
 	else
 	{
 		mTotalBlock = mHead.total_bytes / mHead.block_size;
-		int tmp_i;
 		
 		
 		u32 nbVal = mTotalBlock + 1, bufSize = sizeof(int)*nbVal;
 		char *buf = (char*)malloc(bufSize);
 		char *curBuf = buf;
 		
-		YLOG("mFin.read\n");
 		mFin.read(buf,bufSize);
 		
 		
-		YLOG("for\n");
 		for (int i=0; i< nbVal; ++i)
 		{
 			mIndexBuf.push_back(*(int*)curBuf);
 			curBuf = (char*)((u32)(curBuf+sizeof(int)));
 		}
 		
-			YLOG("SAFE_FREE: %X", curBuf);
 		SAFE_FREE(buf);
-			YLOG("SAFE_FREE done");
 	}
 	
 	
+	YLOG("YCSO::initDecompress done\n");
 	return success;
 }
 

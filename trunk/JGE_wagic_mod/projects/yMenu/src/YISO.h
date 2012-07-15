@@ -6,10 +6,6 @@
 #include "ISO9660.h"
 
 
-enum BackupTypes_ {
-	BACKUP_UNKNOWN, BACKUP_UNTOUCHED, BACKUP_PATCHED
-};
-
 
 class YISO : public YLaunch
 {
@@ -29,11 +25,12 @@ protected:
 	void* read( u32 sector, u32 len );
 	virtual void close();
 	void processPathTable( PathTableRecord* pathTable, u32 pathTableSize );
-	virtual u16 findDirPathTable( u16 parent, string dirPath );
+	virtual u16 findDirPathTable( string dirPath, u16 parent = 1 );
 	void readPathTable();
 	vector<DirectoryRecord*>* getDir( DirectoryRecord* dir );
 	DirectoryRecord* findFile( string fileName, DirectoryRecord* dir );
 	void* getFile( DirectoryRecord* fileRecord );
+	
 	
 public:
 	static const u32 SECTOR_SIZE;
