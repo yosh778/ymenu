@@ -11,7 +11,7 @@ YISO::YISO( string isoPath )
 : YLaunch ( isoPath )
 {
 	mPngData = NULL;
-	mBackupType = BACKUP_UNKNOWN;
+	mBackupType = NO_APP;
 	mTitle = NULL;
 	
 	this->open( isoPath );
@@ -83,31 +83,7 @@ string YISO::getTitle()
 
 int YISO::appInit()
 {
-	int errCode;
-	
-	
-	int appType = NO_APP;
-	
-	switch (mBackupType)
-	{
-		case BACKUP_UNTOUCHED:
-			appType = UNTOUCHED_ISO_APP;
-			break;
-			
-		case BACKUP_PATCHED:
-			appType = PATCHED_ISO_APP;
-			break;
-		
-		default:
-			break;
-	}
-	
-	
-	errCode = this->setAppType( appType );
-	
-	
-	
-	return errCode;
+	return this->setAppType( mBackupType );
 }
 
 bool YISO::open( string path )
@@ -133,9 +109,7 @@ void YISO::close()
 void* YISO::read( u32 sector, u32 len )
 {
 	u32 bufSize = ((len / YISO::SECTOR_SIZE) + 1)*YISO::SECTOR_SIZE;
-	YLOG("read bufSize: %X, len: %X, sector: %X\n", bufSize, len, sector);
 	void* data = malloc(bufSize);
-	YLOG("malloc: %X\n", data);
 	u32 sizeRead = 0;
 	u32 curSector = sector;
 	
@@ -151,7 +125,7 @@ void* YISO::read( u32 sector, u32 len )
 		}
 	}
 	
-	YLOG("read: %X\n", data);
+	//YLOG("read: %X\n", data);
 	
 	return data;
 }
@@ -173,11 +147,11 @@ void YISO::processPathTable( PathTableRecord* pathTable, u32 pathTableSize )
 }
 
 
-u16 YISO::findDirPathTable( u16 parent, string dirPath )
+u16 YISO::findDirPathTable( string dirPath, u16 parent )
 {
 	u32 curIdx = -1;
 	bool found = false;
-	YLOG("findDirPathTable: %X %s\n", parent, dirPath.c_str());
+	//YLOG("findDirPathTable: %X %s\n", parent, dirPath.c_str());
 	
 	// If path contains at least one directory, search
 	if ( dirPath.find('/') != string::npos )
@@ -193,7 +167,7 @@ u16 YISO::findDirPathTable( u16 parent, string dirPath )
 	
 	if (found)
 	{
-		return this->findDirPathTable( curIdx+1, dirPath.substr( dirPath.find('/')+1) );
+		return this->findDirPathTable( dirPath.substr( dirPath.find('/')+1), curIdx+1 );
 	}
 	else	return parent;
 }
@@ -248,7 +222,6 @@ void YISO::Create()
 	if ( mFin.is_open() )
 	{
 		char *sectorBuf = (char*)malloc( YISO::SECTOR_SIZE );
-		YLOG("mFin.is_open\n");
 		
 		int err;
 		err = this->readSector( sectorBuf, 16);
@@ -262,18 +235,14 @@ void YISO::Create()
 			YLOG("PrimaryVolumeDescriptor: %X %X\n", lbaPathTableL, pathTableSize);
 			void *pathTableBuf = this->read(lbaPathTableL, pathTableSize);
 			
-			YLOG("processPathTable go\n");
 			this->processPathTable( (PathTableRecord*)pathTableBuf, pathTableSize );
-			YLOG("processPathTable done\n");
 			
 			
-			u16 parentId = 1, dirId;
-			YLOG("findDirPathTable go\n");
-			if ( (dirId = this->findDirPathTable( parentId, "PSP_GAME/SYSDIR/" )) > parentId )
+			u16 dirId;
+			if ( (dirId = this->findDirPathTable( "PSP_GAME/SYSDIR/" )) > 1 )
 			{
 				YLOG("findDirPathTable done: %X %X\n", dirId, mPathTable[dirId-1]->lba);
 				this->readSector( sectorBuf, mPathTable[dirId-1]->lba);
-				YLOG("readSectorDir done\n");
 				
 				DirectoryRecord* dir = (DirectoryRecord*)sectorBuf;
 				DirectoryRecord* old = findFile( "EBOOT.OLD", dir );
@@ -282,28 +251,22 @@ void YISO::Create()
 				if (old != NULL)
 				{
 					YLOG("OLD: %08lX %08lX\n", old->fileSize.LE, old->lba.LE);
-					mBackupType = BACKUP_PATCHED;
-					/*void* file = this->getFile(old);
-					YLOG("%X\n", file);
-					if ( file != NULL)
-						YLOG("%X %X\n", *(u32*)file, *(u32*)((u32)file+4));
-					SAFE_FREE(file);*/
+					mBackupType = PATCHED_ISO_APP;
 				}
 				else if (bin != NULL)
 				{
 					YLOG("BIN: %08lX %08lX\n", bin->fileSize.LE, bin->lba.LE);
-					mBackupType = BACKUP_UNTOUCHED;
+					mBackupType = UNTOUCHED_ISO_APP;
 				}
 				
 			}
 			
 			
-			YLOG("findDirPathTable go\n");
-			if ( (dirId = this->findDirPathTable( parentId, "PSP_GAME/" )) > parentId )
+			//YLOG("findDirPathTable go\n");
+			if ( (dirId = this->findDirPathTable( "PSP_GAME/" )) > 1 )
 			{
 				YLOG("findDirPathTable done: %X %X\n", dirId, mPathTable[dirId-1]->lba);
 				this->readSector( sectorBuf, mPathTable[dirId-1]->lba);
-				YLOG("readSectorDir done\n");
 				
 				DirectoryRecord* dir = (DirectoryRecord*)sectorBuf;
 				DirectoryRecord* png = findFile( "ICON0.PNG", dir );
@@ -327,7 +290,7 @@ void YISO::Create()
 				}
 				
 			}
-			YLOG("read done\n");
+			
 			SAFE_FREE(pathTableBuf);
 			mPathTable.clear();
 		}
