@@ -1,4 +1,6 @@
 
+- fix bilinear filtering border display bug
+
 - make icons disappear at hb launch
 
 - make beginning appear alpha slower
