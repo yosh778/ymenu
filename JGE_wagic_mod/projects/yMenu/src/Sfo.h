@@ -16,12 +16,12 @@ typedef struct {
 
 
 enum sfo_param_type {
-	SFO_STRING = 2, SFO_VAL = 4
+	PSF_TYPE_BIN = 0, PSF_TYPE_STR = 2, PSF_TYPE_VAL = 4
 };
 
 typedef struct {
 	u16 valOffset;
-	u8 unknown0;	// always 0x4
+	u8 alignment;
 	u8 type;	// sfo_param_type
 	u32 minValSize;
 	u32 maxValSize;
