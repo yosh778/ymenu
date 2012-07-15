@@ -56,13 +56,13 @@ void YEntry::Create()
 		else if ( mFileType == ISO_FILE )	mApp = new YISO ( getAppPath() );
 		else if ( mFileType == CSO_FILE )	mApp = new YCSO ( getAppPath() );
 		
-		mApp->appInit();
 		if ( typeid(*mApp) == typeid(YISO) )	((YISO*)mApp)->Create();
 		else if ( typeid(*mApp) == typeid(YCSO) )
 		{
 			((YCSO*)mApp)->Create();
 			((YCSO*)mApp)->finishDecompress();
 		}
+		mApp->appInit();
 		
 
 		if (mApp->getPngData() != NULL)
