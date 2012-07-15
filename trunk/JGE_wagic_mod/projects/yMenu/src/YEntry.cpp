@@ -57,11 +57,7 @@ void YEntry::Create()
 		else if ( mFileType == CSO_FILE )	mApp = new YCSO ( getAppPath() );
 		
 		if ( typeid(*mApp) == typeid(YISO) )	((YISO*)mApp)->Create();
-		else if ( typeid(*mApp) == typeid(YCSO) )
-		{
-			((YCSO*)mApp)->Create();
-			((YCSO*)mApp)->finishDecompress();
-		}
+		else if ( typeid(*mApp) == typeid(YCSO) )	((YCSO*)mApp)->Create();
 		mApp->appInit();
 		
 
@@ -111,7 +107,7 @@ void YEntry::Destroy()
 		mIcon != dirSys->getZipIcon())
 		SAFE_DELETE(mIcon);
 	
-	if ( mApp != NULL )
+	/*if ( mApp != NULL )
 	{
 		if ( typeid(*mApp) == typeid(YISO) )
 		{
@@ -128,7 +124,8 @@ void YEntry::Destroy()
 			Eboot* o = ((Eboot*)mApp);
 			SAFE_DELETE(o);
 		}
-	}
+	}*/
+	SAFE_DELETE(mApp);
 }
 
 

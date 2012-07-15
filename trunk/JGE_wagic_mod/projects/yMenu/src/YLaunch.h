@@ -30,7 +30,7 @@ private:
 	
 public:
 	YLaunch( string bootPath );
-	~YLaunch();
+	virtual ~YLaunch();
 	
 	int launch();
 	int getAppType();

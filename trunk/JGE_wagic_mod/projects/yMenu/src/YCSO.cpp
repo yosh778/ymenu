@@ -6,14 +6,12 @@
 YCSO::YCSO( string csoPath )
 : YISO ( csoPath )
 {
-	
-	if ( mFin.is_open() )	YLOG("mFin.is_open __ initDecompress\n");
 	this->initDecompress();
 }
 
 YCSO::~YCSO()
 {
-
+	SAFE_FREE(mTitle);
 }
 
 bool YCSO::isCSO ( string filePath )
@@ -56,42 +54,16 @@ bool YCSO::isCSO ( string filePath )
 
 bool YCSO::initDecompress()
 {
-	YLOG("YCSO::initDecompress\n");
 	bool success = true;
 	
 	
 	mFin.read((char*)&mHead,sizeof(mHead));
 	
 	if ( strncmp((char*)mHead.magic, "CISO", 4) || mHead.block_size == 0 || mHead.total_bytes == 0 )	success = false;
-	else
-	{
-		mTotalBlock = mHead.total_bytes / mHead.block_size;
-		
-		
-		u32 nbVal = mTotalBlock + 1, bufSize = sizeof(int)*nbVal;
-		char *buf = (char*)malloc(bufSize);
-		char *curBuf = buf;
-		
-		mFin.read(buf,bufSize);
-		
-		
-		for (int i=0; i< nbVal; ++i)
-		{
-			mIndexBuf.push_back(*(int*)curBuf);
-			curBuf = (char*)((u32)(curBuf+sizeof(int)));
-		}
-		
-		SAFE_FREE(buf);
-	}
+	else	mTotalBlock = mHead.total_bytes / mHead.block_size;
 	
 	
-	YLOG("YCSO::initDecompress done\n");
 	return success;
-}
-
-void YCSO::finishDecompress()
-{
-	mIndexBuf.clear();
 }
 
 
@@ -107,7 +79,14 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 	
 	if ( sector < mTotalBlock )
 	{
-		int index = mIndexBuf[sector];
+		int indexBuf[2];
+		int idxPos = sizeof(mHead) + sizeof(int)*sector;
+		
+		mFin.seekg(idxPos,ios::beg);
+		mFin.read((char*)indexBuf,sizeof(indexBuf));
+		
+		
+		int index = indexBuf[0];
 		int plain = index & 0x80000000;
 		index  &= 0x7fffffff;
 		int read_pos = index << (mHead.align);
@@ -117,7 +96,7 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 			read_size = mHead.block_size;
 		else
 		{
-			int index2 = mIndexBuf[sector+1] & 0x7fffffff;
+			int index2 = indexBuf[1] & 0x7fffffff;
 			// Have to read more bytes if align was set
 			if ( mHead.align )
 				read_size = (index2-index+1) << (mHead.align);
