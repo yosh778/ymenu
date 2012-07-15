@@ -44,6 +44,7 @@ public:
 	YCSO( string csoPath );
 	~YCSO();
 	
+	void finishDecompress();
 	static bool isCSO ( string filePath );
 };
 

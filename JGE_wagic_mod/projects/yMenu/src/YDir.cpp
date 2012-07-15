@@ -79,7 +79,7 @@ void YDir::Destroy()
 
 int YDir::addCurFolder( int step )
 {
-	YLOG("YDir::addCurFolder\n");
+	//YLOG("YDir::addCurFolder\n");
 	int move = 0;
 	mDoRush = false;
 	
@@ -131,7 +131,7 @@ int YDir::addCurFolder( int step )
 		else	move = -1;
 	}
 	
-	YLOG("YDir::addCurFolder done\n");
+	//YLOG("YDir::addCurFolder done\n");
 	return move;
 }
 

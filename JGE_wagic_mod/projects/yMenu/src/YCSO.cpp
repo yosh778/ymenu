@@ -1,11 +1,14 @@
 
 #include "YCSO.h"
+#include "lib.h"
 
 
 YCSO::YCSO( string csoPath )
 : YISO ( csoPath )
 {
-	mPngData = NULL;
+	
+	if ( mFin.is_open() )	YLOG("mFin.is_open __ initDecompress\n");
+	this->initDecompress();
 }
 
 YCSO::~YCSO()
@@ -63,16 +66,35 @@ bool YCSO::initDecompress()
 	{
 		mTotalBlock = mHead.total_bytes / mHead.block_size;
 		int tmp_i;
-
-		for (int i=0; i< mTotalBlock + 1; ++i)
+		
+		
+		u32 nbVal = mTotalBlock + 1, bufSize = sizeof(int)*nbVal;
+		char *buf = (char*)malloc(bufSize);
+		char *curBuf = buf;
+		
+		YLOG("mFin.read\n");
+		mFin.read(buf,bufSize);
+		
+		
+		YLOG("for\n");
+		for (int i=0; i< nbVal; ++i)
 		{
-			mFin.read((char*)&tmp_i,sizeof(int));
-			mIndexBuf.push_back(tmp_i);
+			mIndexBuf.push_back(*(int*)curBuf);
+			curBuf = (char*)((u32)(curBuf+sizeof(int)));
 		}
+		
+			YLOG("SAFE_FREE: %X", curBuf);
+		SAFE_FREE(buf);
+			YLOG("SAFE_FREE done");
 	}
 	
 	
 	return success;
+}
+
+void YCSO::finishDecompress()
+{
+	mIndexBuf.clear();
 }
 
 
@@ -108,7 +130,6 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 		
 		
 		void *cso_data = NULL;
-		void *destBuf = NULL;
 		cso_data = malloc(read_size);
 		unsigned decLen = 0;
 
@@ -163,6 +184,7 @@ int YCSO::readSector( char *destBuf, unsigned sector )
 		
 		if ( !ret )	ret = decLen;
 	}
+	else	ret = -3;
 	
 	
 	return ret;
