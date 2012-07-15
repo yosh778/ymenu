@@ -111,7 +111,24 @@ void YEntry::Destroy()
 		mIcon != dirSys->getZipIcon())
 		SAFE_DELETE(mIcon);
 	
-	SAFE_DELETE(mApp);
+	if ( mApp != NULL )
+	{
+		if ( typeid(*mApp) == typeid(YISO) )
+		{
+			YISO* o = ((YISO*)mApp);
+			SAFE_DELETE(o);
+		}
+		else if ( typeid(*mApp) == typeid(YCSO) )
+		{
+			YCSO* o = ((YCSO*)mApp);
+			SAFE_DELETE(o);
+		}
+		else if ( typeid(*mApp) == typeid(Eboot) )
+		{
+			Eboot* o = ((Eboot*)mApp);
+			SAFE_DELETE(o);
+		}
+	}
 }
 
 
