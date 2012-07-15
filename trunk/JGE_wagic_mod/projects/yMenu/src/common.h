@@ -43,9 +43,9 @@
 
 #ifdef YDEBUG
 #undef YLOG
-#undef SLEEP(a)
 #define YLOG Lib::psp_dbg
-#define SLEEP(a) sceKernelDelayThread(1000000*a);
+//#undef SLEEP(a)
+//#define SLEEP(a) sceKernelDelayThread(1000000*a);
 #endif
 
 #include <intraFont.h>
