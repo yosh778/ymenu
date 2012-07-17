@@ -86,7 +86,7 @@ using namespace std;
 #define ARGB(a, r, g, b)	(((r)<<16) | ((g)<<8) | (b) | ((a)<<24))
 #define FONT_SIZE 28
 #define FPS_RATE 60
-#define EBOOTNAMES { "EBOOT.PBP", "wmenu.bin" }
+#define EBOOTNAMES { "EBOOT.PBP", "VBOOT.PBP", "wmenu.bin" }
 #define HOMEBREW_PATH "ms0:/PSP/GAME"
 #define SAVEDATA_PATH "ms0:/PSP/SAVEDATA"
 #define DEFAULT_ICON_W 144

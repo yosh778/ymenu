@@ -172,9 +172,6 @@ void GameApp::Update()
 //-------------------------------------------------------------------------------------
 void GameApp::Render()
 {
-
-	JRenderer* renderer = JRenderer::GetInstance();
-	
 	Display* displayer = Display::GetInstance();
 	displayer->renderBg();
 	displayer->renderInfoQuad();

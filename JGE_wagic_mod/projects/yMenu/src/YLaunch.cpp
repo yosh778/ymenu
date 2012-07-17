@@ -1,5 +1,6 @@
 
 #include "YLaunch.h"
+#include "lib.h"
 
 
 YLaunch::YLaunch( string bootPath )
@@ -8,6 +9,7 @@ YLaunch::YLaunch( string bootPath )
 	this->setBootPath( bootPath );
 	mEbootPath = "";
 	mRunlevel = -1;
+	mIsoDriver = MODE_NP9660;
 	
 	
 	// Clear Memory
@@ -28,6 +30,7 @@ int YLaunch::launch()
 	if ( this->getAppType() == NO_APP || this->getBootPath() == "" )	return -1;
 	
 	
+	sctrlSESetBootConfFileIndex(mIsoDriver);
 	
 	// ISO Runlevel
 	if(this->getRunlevel() == PSP_INIT_APITYPE_UMDEMU_MS)
@@ -49,6 +52,7 @@ int YLaunch::launch()
 	}
 	
 	
+	YLOG("mRunlevel: %X, bootPath: %s\n, mParam.key: %s, mParam.argp: %s, mParam.args: %X\n", mRunlevel, this->getBootPath().c_str(), mParam.key, mParam.argp, mParam.args );
 	// Trigger Reboot
 	return sctrlKernelLoadExecVSHWithApitype(mRunlevel, this->getBootPath().c_str(), &mParam);
 }
@@ -69,14 +73,17 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case PSN_APP:
+			mIsoDriver = MODE_NP9660;
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
 		case UNTOUCHED_ISO_APP:
+			mIsoDriver = MODE_INFERNO;
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
 		case PATCHED_ISO_APP:
+			mIsoDriver = MODE_INFERNO;
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
