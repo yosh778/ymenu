@@ -518,13 +518,13 @@ bool CmdExtract::ExtractCurrentFile(CommandData *Cmd,Archive &Arc,int HeaderSize
     }
 #endif
 
-	// Change EBOOT.PBP into wmenu.bin
+	// Change EBOOT.PBP into VBOOT.PBP
     std::string lcoutputfile = DestFileName;
     std::transform(lcoutputfile.begin(), lcoutputfile.end(), lcoutputfile.begin(), ::tolower);
     size_t found = lcoutputfile.find("eboot.pbp");
     if (found != std::string::npos)
 	{
-        lcoutputfile = lcoutputfile.substr(0, found) + "wmenu.bin" + lcoutputfile.substr(found + 9);
+        lcoutputfile = lcoutputfile.substr(0, found) + "VBOOT.PBP" + lcoutputfile.substr(found + 9);
 		strcpy(DestFileName,lcoutputfile.c_str());
 	}
 
