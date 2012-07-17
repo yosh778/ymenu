@@ -290,7 +290,7 @@ int do_extract_currentfile(uf,popt_extract_without_path,popt_overwrite,password,
 	{
 		int idx = eIdx - cache;
 		//printf("Transforming %s, idx= %i\n",filename_inzip,idx);
-		char nname[] = "wmenu.bin";
+		char nname[] = "VBOOT.PBP";
 		
 		for ( i=0; i<strlen(nname); ++i )
 			filename_inzip[idx+i] = nname[i];
