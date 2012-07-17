@@ -9,7 +9,7 @@ YLaunch::YLaunch( string bootPath )
 	this->setBootPath( bootPath );
 	mEbootPath = "";
 	mRunlevel = -1;
-	mIsoDriver = MODE_NP9660;
+	mIsoDriver = MODE_INFERNO;
 	
 	
 	// Clear Memory
@@ -69,6 +69,7 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case HOMEBREW_APP:
+			mIsoDriver = MODE_INFERNO;
 			tmpRunlevel = PSP_INIT_APITYPE_MS2;
 			break;
 			
