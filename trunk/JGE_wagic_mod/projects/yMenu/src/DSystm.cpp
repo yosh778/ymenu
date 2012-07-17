@@ -121,7 +121,7 @@ int DSystm::readDir()
 		
 		if ( tmpName == YEntry::ARCHIVE_EXTS[0] || tmpName == YEntry::ARCHIVE_EXTS[1] \
 			|| tmpName == "iso" || tmpName == "cso" \
-			|| (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR)
+			|| ( (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR) )
 		{
 			YEntry yEntry((*dir)[i]);
 			mDir->mFolders.push_back(yEntry);

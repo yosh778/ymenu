@@ -17,6 +17,7 @@ private:
 	int mRunlevel;
 	string mBootPath;
 	string mEbootPath;
+	int mIsoDriver;
 	
 	// Load Execute Parameter
 	struct SceKernelLoadExecVSHParam mParam;

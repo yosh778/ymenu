@@ -205,7 +205,6 @@ void YDir::update()
 		mCurToCross.x-= curStep;
 		//mCurInterToCross-= ((float)curStep)/mToCross.x * mInterToCross;
 		mCurInterToCross = ((float)mCurToCross.x)/mToCross.x * mInterToCross;
-		int res = ((float)curStep)/mToCross.x * mInterToCross;
 		mInterOffset+= ((float)curStep)/mToCross.x * mInterToCross;
 	}
 	// If no slide is happening, finish sliding
