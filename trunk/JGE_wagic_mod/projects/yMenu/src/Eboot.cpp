@@ -1,4 +1,3 @@
-
 #include "Eboot.h"
 
 
@@ -150,5 +149,44 @@ int Eboot::appInit()
 	
 	
 	return errCode;
+}
+
+unsigned int Eboot::isEboot(string filePath)
+{
+	// Result (Not EBOOT)
+	bool result = false;
+	
+	// Open File
+	SceUID fd = sceIoOpen(filePath.c_str(), PSP_O_RDONLY, 0777);
+	
+	// Opened File
+	if(fd >= 0)
+	{
+		// Header Buffer
+		unsigned char header[4];
+		
+		// Read Header
+		if(sizeof(header) == sceIoRead(fd, header, sizeof(header)))
+		{
+			// ISO Header Magic
+			unsigned char isoFlags[16] = {
+				0x01, 0x43, 0x44, 0x30, 0x30, 0x31, 0x01, 0x00,
+				0x50, 0x53, 0x50, 0x20, 0x47, 0x41, 0x4D, 0x45
+			};
+			
+			// Valid Magic
+			if( !memcmp(header, isoFlags, sizeof(header)) )
+			{
+				// ISO File
+				result = true;
+			}
+		}
+		
+		// Close File
+		sceIoClose(fd);
+	}
+	
+	// Return Result
+	return result;
 }
 
