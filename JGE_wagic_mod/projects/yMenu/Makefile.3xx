@@ -1,7 +1,7 @@
 TARGET = yMenu
 OBJS = src/GameApp.o src/GameLauncher.o src/DSystm.o src/YEntry.o src/lib.o src/Eboot.o src/YDir.o src/Display.o src/Sfo.o src/YLaunch.o src/YISO.o src/YCSO.o
 
-BUILD_PRX = 0
+BUILD_PRX = 1
 PSP_FW_VERSION=660
 
 CFLAGS = -O2 -G0 -Wall -DDEVHOOK -DPSPFW3XX

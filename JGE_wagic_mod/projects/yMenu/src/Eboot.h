@@ -41,6 +41,8 @@ public:
 	char* getCategory();
 	unsigned int getPngSize();
 	int appInit();
+	
+	static bool isEboot ( string filePath );
 };
 
 
