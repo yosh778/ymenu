@@ -151,7 +151,7 @@ int Eboot::appInit()
 	return errCode;
 }
 
-unsigned int Eboot::isEboot(string filePath)
+bool Eboot::isEboot(string filePath)
 {
 	// Result (Not EBOOT)
 	bool result = false;
@@ -168,14 +168,8 @@ unsigned int Eboot::isEboot(string filePath)
 		// Read Header
 		if(sizeof(header) == sceIoRead(fd, header, sizeof(header)))
 		{
-			// ISO Header Magic
-			unsigned char isoFlags[16] = {
-				0x01, 0x43, 0x44, 0x30, 0x30, 0x31, 0x01, 0x00,
-				0x50, 0x53, 0x50, 0x20, 0x47, 0x41, 0x4D, 0x45
-			};
-			
 			// Valid Magic
-			if( !memcmp(header, isoFlags, sizeof(header)) )
+			if( !memcmp(header, "\0PBP", sizeof(header)) )
 			{
 				// ISO File
 				result = true;
