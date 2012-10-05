@@ -436,10 +436,10 @@ void DSystm::ChYDir( bool getParent )
 		{
 			int pos = mWorkPath.rfind('/', mWorkPath.size()-2 )+1;
 			deadChild = mWorkPath.substr( pos, mWorkPath.size()-pos-1 );
-			YLOG("%X\n", mWorkPath.size()-pos-1 );
+			//YLOG("%X\n", mWorkPath.size()-pos-1 );
 		}
 		else	deadChild = "";
-		YLOG("mWorkPath: %s, deadChild: %s, %X\n", mWorkPath.c_str(), deadChild.c_str(), mWorkPath.rfind('/', mWorkPath.size()-2 ));
+		//YLOG("mWorkPath: %s, deadChild: %s, %X\n", mWorkPath.c_str(), deadChild.c_str(), mWorkPath.rfind('/', mWorkPath.size()-2 ));
 
 		setWorkPath( workpath );
 		

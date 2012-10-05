@@ -46,9 +46,9 @@ void GameApp::Create()
 	
 	renderer->EnableVSync(true);
 	
-	YLOG("GameApp::Create\n");
+	//YLOG("GameApp::Create\n");
 	
-	YLOG("GameApp::Create intraFont\n");
+	//YLOG("GameApp::Create intraFont\n");
 #ifdef USE_TTF
 	mTTFont1 = new JTTFont();
 	mTTFont1->Load("BorisBlackBloxx.ttf", FONT_SIZE);
@@ -58,7 +58,7 @@ void GameApp::Create()
 	
 	if ( mFont == NULL)	FATAL_ERROR("Failed to load font\n");
 #endif
-	YLOG("GameApp::Create intraFont done\n");
+	//YLOG("GameApp::Create intraFont done\n");
 	
 	
 	JGE* engine = JGE::GetInstance();
@@ -107,9 +107,9 @@ void GameApp::Create()
 										);
 	
 	
-	YLOG("GameApp::Create dirSys\n");
+	//YLOG("GameApp::Create dirSys\n");
 	dirSys->Create(workPath);
-	YLOG("GameApp::Create dirSys done\n");
+	//YLOG("GameApp::Create dirSys done\n");
 }
 
 
@@ -128,7 +128,9 @@ void GameApp::Destroy()
 	YLOG("copying eboot path: %s\n", dirSys->getAppPath().c_str());
 	if (this->settings != NULL)	strcpy(this->settings->filename, dirSys->getAppPath().c_str());
 #else
+	YLOG("launch\n");
 	dirSys->getCurApp()->launch();
+	YLOG("launch done\n");
 #endif
 	
 #endif

@@ -6,7 +6,7 @@ Eboot::Eboot( string ebootPath )
 {
 	mPngData = NULL;
 	mTitle = NULL;
-	YLOG("ebootPath: %s\n", ebootPath.c_str());
+	//YLOG("ebootPath: %s\n", ebootPath.c_str());
 	readEboot( ebootPath );
 	
 }
@@ -19,14 +19,14 @@ Eboot::~Eboot()
 
 void Eboot::readEboot( string ebootPath )
 {
-	YLOG("Eboot::readEboot\n");
+	//YLOG("Eboot::readEboot\n");
 	int eID = Lib::openFile( ebootPath );
 	
 	readOffsets( eID );
 	transOffsets( eID );
 	readPngData( eID );
 	getSfoData( eID );
-	YLOG("Eboot::readEboot done\n");
+	//YLOG("Eboot::readEboot done\n");
 }
 
 EbootSlot* Eboot::getSlot( int slot )

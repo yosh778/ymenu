@@ -9,7 +9,12 @@ YLaunch::YLaunch( string bootPath )
 	this->setBootPath( bootPath );
 	mEbootPath = "";
 	mRunlevel = -1;
+	
+	#ifndef TN_CFW
 	mIsoDriver = MODE_INFERNO;
+	#else
+	mIsoDriver = MODE_MARCH33;
+	#endif
 	
 	
 	// Clear Memory
@@ -29,32 +34,53 @@ int YLaunch::launch()
 	// If not an app or no bootPath, don't launch
 	if ( this->getAppType() == NO_APP || this->getBootPath() == "" )	return -1;
 	
-	
+	string umdFile = "";
+
+	#ifndef TN_CFW
 	sctrlSESetBootConfFileIndex(mIsoDriver);
+	#endif
 	
 	// ISO Runlevel
-	if(this->getRunlevel() == PSP_INIT_APITYPE_UMDEMU_MS)
+	#ifndef TN_CFW
+	if (this->getRunlevel() == PSP_INIT_APITYPE_UMDEMU_MS)
 	{
 		
 		// PSN EBOOT Support
 		if( this->getAppType() == PSN_APP )
 		{
 			// Disable Galaxy ISO Emulator Patch
-			sctrlSESetUmdFile("");
+			umdFile = "";
 		}
 		
 		// ISO
 		else
 		{
 			// Enable Galaxy ISO Emulator Patch
-			sctrlSESetUmdFile(mBootPath.c_str());
+			umdFile = mBootPath.c_str();
 		}
+
+		sctrlSESetUmdFile(umdFile.c_str());
 	}
+	#else
+	if (this->getRunlevel() == PSP_INIT_APITYPE_DISC)
+	{
+		umdFile = mBootPath.c_str();
+		if ( this->getAppType() != PSN_APP )	mBootPath = mEbootPath;
+		
+		//YLOG("sctrlSEMountUmdFromFile: %s, mIsoDriver: %X\n", umdFile.c_str(), mIsoDriver);
+		sctrlSEMountUmdFromFile(umdFile.c_str(), mIsoDriver);
+		//YLOG("mountUmdFsctrlSEMountUmdFromFileromFile done");
+	}
+	#endif
+
 	
-	
-	YLOG("mRunlevel: %X, bootPath: %s\n, mParam.key: %s, mParam.argp: %s, mParam.args: %X\n", mRunlevel, this->getBootPath().c_str(), mParam.key, mParam.argp, mParam.args );
+	//YLOG("mRunlevel: %X, bootPath: %s\n, mParam.key: %s, mParam.argp: %s, mParam.args: %X\n", mRunlevel, this->getBootPath().c_str(), mParam.key, mParam.argp, mParam.args );
 	// Trigger Reboot
-	return sctrlKernelLoadExecVSHWithApitype(mRunlevel, this->getBootPath().c_str(), &mParam);
+	int ret = sctrlKernelLoadExecVSHWithApitype(mRunlevel, this->getBootPath().c_str(), &mParam);
+	
+	//YLOG("sctrlKernelLoadExecVSHWithApitype done done");
+	
+	return ret;
 }
 
 int YLaunch::setAppType( int appType )
@@ -69,7 +95,11 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case HOMEBREW_APP:
+			#ifndef TN_CFW
 			mIsoDriver = MODE_INFERNO;
+			#else
+			mIsoDriver = MODE_MARCH33;
+			#endif
 			tmpRunlevel = PSP_INIT_APITYPE_MS2;
 			break;
 			
@@ -79,12 +109,20 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case UNTOUCHED_ISO_APP:
+			#ifndef TN_CFW
 			mIsoDriver = MODE_INFERNO;
+			#else
+			mIsoDriver = MODE_MARCH33;
+			#endif
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
 		case PATCHED_ISO_APP:
+			#ifndef TN_CFW
 			mIsoDriver = MODE_INFERNO;
+			#else
+			mIsoDriver = MODE_MARCH33;
+			#endif
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
@@ -140,7 +178,12 @@ int YLaunch::setRunlevel( int runlevel )
 			
 			
 			// Prepare ISO Reboot
+			#ifndef TN_CFW
 			mParam.key = "umdemu";
+			#else
+			mParam.key = "game";
+			runlevel = PSP_INIT_APITYPE_DISC;
+			#endif
 			
 			break;
 			
