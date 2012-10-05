@@ -32,7 +32,7 @@ void Sfo::init()
 	}
 
 
-	YLOG("init done\n");
+	//YLOG("init done\n");
 }
 
 

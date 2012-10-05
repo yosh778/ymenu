@@ -53,7 +53,7 @@ void YDir::Create( string deadChild, bool init )
 	initSlideY( slideInY, YEntry::yFolders );
 	
 	
-	YLOG("YDir::Create\n");
+	//YLOG("YDir::Create\n");
 	for ( int i=0; i< mFolders.size(); ++i )
 		mFolders[i].Create();
 
@@ -67,17 +67,17 @@ void YDir::Create( string deadChild, bool init )
 		mFolders[mCurFolder].setZoom(1);
 		mFocus.x = (SCREEN_WIDTH-DEFAULT_ICON_W) /2;
 	}
-	YLOG("YDir::Create done\n");
+	//YLOG("YDir::Create done\n");
 }
 
 void YDir::Destroy()
 {
-	YLOG("YDir::Destroy\n");
+	//YLOG("YDir::Destroy\n");
 	for ( int i=0; i< mFolders.size(); ++i )
 		mFolders[i].Destroy();
 
 	mFolders.clear();
-	YLOG("YDir::Destroy done\n");
+	//YLOG("YDir::Destroy done\n");
 }
 
 int YDir::addCurFolder( int step )
@@ -389,7 +389,7 @@ vector<SceIoDirent>* YDir::getDir( string dirName )
 
 	if (id < 0)
 	{
-		YLOG("ERROR: sceIoDopen failed to open dir %s\n",dirName.c_str());
+		//YLOG("ERROR: sceIoDopen failed to open dir %s\n",dirName.c_str());
 		return NULL;
 	}
 
