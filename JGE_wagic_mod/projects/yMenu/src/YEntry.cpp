@@ -58,21 +58,26 @@ void YEntry::Create()
 		
 		if ( typeid(*mApp) == typeid(YISO) )	((YISO*)mApp)->Create();
 		else if ( typeid(*mApp) == typeid(YCSO) )	((YCSO*)mApp)->Create();
+		//YLOG("mApp Created\n");
 		mApp->appInit();
+		//YLOG("appInit done\n");
 		
 
 		if (mApp->getPngData() != NULL)
 		{
+			//YLOG("LoadTexture go\n");
 			this->mIconTex = renderer->LoadTexture(this->getAppPath().c_str(), TEX_TYPE_NONE
 																									#ifdef wagic
 																									, TEXTURE_FORMAT,
 																									mApp->getPngData()
 																									#endif
 																									);
+			//YLOG("LoadTexture done\n");
 			mApp->freePngData();
 			
 			if ( mIconTex != NULL )	mIcon = new JQuad(mIconTex, 0, 0, mIconTex->mWidth, mIconTex->mHeight);
 			else	mIcon = DSystm::GetInstance()->getCorruptIcon();
+			//YLOG("PNG done\n");
 		}
 		else	this->mIcon =  DSystm::GetInstance()->getDefIcon();
 	}

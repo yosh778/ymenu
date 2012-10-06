@@ -1002,7 +1002,10 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
           * read, but not after other chunks have been read.
           */
          if (length > 0 || png_ptr->mode & PNG_AFTER_IDAT)
-            png_error(png_ptr, "Too many IDAT's found");
+            // Custom error : else crashes PSP !
+            //png_error(png_ptr, "Too many IDAT's found");
+            return -1;
+
          png_crc_finish(png_ptr, length);
       }
       else if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))

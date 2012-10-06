@@ -37,15 +37,14 @@ bool YISO::isISO ( string filePath )
 		sceIoLseek32(fd, 0x8000, PSP_SEEK_SET);
 		
 		// Header Buffer
-		unsigned char header[16];
+		unsigned char header[8];
 		
 		// Read Header
 		if(sizeof(header) == sceIoRead(fd, header, sizeof(header)))
 		{
 			// ISO Header Magic
-			unsigned char isoFlags[16] = {
-				0x01, 0x43, 0x44, 0x30, 0x30, 0x31, 0x01, 0x00,
-				0x50, 0x53, 0x50, 0x20, 0x47, 0x41, 0x4D, 0x45
+			unsigned char isoFlags[8] = {
+				0x01, 0x43, 0x44, 0x30, 0x30, 0x31, 0x01, 0x00
 			};
 			
 			// Valid Magic
@@ -283,7 +282,9 @@ void YISO::Create()
 					YLOG("sfoData: %X\n", sfoData);
 					
 					Sfo sfo(sfoData);
+					YLOG("sfo initialized\n");
 					mTitle = sfo.getTitle();
+					YLOG("sfo getTitle done\n");
 					//mCategory = sfo.getCategory();
 					
 					SAFE_FREE(sfoData);
@@ -302,6 +303,8 @@ void YISO::Create()
 		
 		this->close();
 	}
+
+	YLOG("Create done\n");
 }
 
 inline u32 YISO::lba2Pos( u32 lba )
