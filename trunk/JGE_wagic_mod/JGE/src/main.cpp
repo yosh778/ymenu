@@ -32,7 +32,7 @@
 
 
 #ifdef DEVHOOK
-PSP_MODULE_INFO(JGEApp_Title, 0, 1, 1);
+PSP_MODULE_INFO(yMenu, 0, 1, 1);
 PSP_MAIN_THREAD_ATTR(PSP_THREAD_ATTR_USER);
 //256 is not enough for the network to correctly start,
 // let's find an appropriate value the day JGE has working network

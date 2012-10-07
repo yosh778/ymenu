@@ -27,7 +27,7 @@
 
 //#define YDEBUG
 //#define VHBL
-#define TN_CFW
+//#define TN_CFW
 
 
 #define FATAL_ERROR(...) DO_EXIT()
