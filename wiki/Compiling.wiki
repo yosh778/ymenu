@@ -1,14 +1,15 @@
-#summary One-sentence summary of this page.
+#summary Compiling with minpspsdk
 #labels Featured,Phase-Implementation
 
 = Introduction =
 
-Add your content here.
+With minpspsdk having so many dependency issues depending on the version, here's a quick guide how to compile with it.
 
 
-= Details =
+= Compiling =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * To compile with minpspsdk, first get a copy of *minpspsdk 0.10.0*, as most other versions seem to throw dependency errors.
+  * Uninstall all existing minpspsdk version, and install version 0.10.0
+  * In common.h, make sure one of #define TN_CFW / #define VHBL defines is uncommented, to choose one compile mode
+  * Compile with command "make 3xx" in the "[...]/project/yMenu/" folder
+  * Congrats ! You should now have successfully compiled yMenu
