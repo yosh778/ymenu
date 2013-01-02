@@ -4,6 +4,12 @@
 
 #include "common.h"
 
+#ifdef MODE_INFERNO
+#define MODE_DEFAULT MODE_INFERNO
+#else
+#define MODE_DEFAULT MODE_MARCH33
+#endif
+
 enum appTypes_ {
 	NO_APP, HOMEBREW_APP, PSN_APP, POPS_APP, UNTOUCHED_ISO_APP, PATCHED_ISO_APP
 };

@@ -241,6 +241,7 @@ int Lib_LoadTexThread(SceSize args, void *argp)
 	
 	JQuad* quad = new JQuad(tex, 0, 0, tex->mWidth, tex->mHeight);
 	
+    // TODO : Secure tex / quad / finished multithread access ..
 	*(lTT->tex) = tex;
 	*(lTT->quad) = quad;
 	*(lTT->finished) = 1;
