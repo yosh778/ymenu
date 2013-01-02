@@ -18,8 +18,8 @@ int sctrlSEMountUmdFromFile(const char * file, int index);
 
 enum SEUmdModes
 {
-	MODE_NP9660 = 0,
-	MODE_MARCH33 = 1,
+    MODE_MARCH33 = 1,
+    MODE_NP9660 = 2,
 };
 
 

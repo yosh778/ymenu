@@ -10,11 +10,7 @@ YLaunch::YLaunch( string bootPath )
 	mEbootPath = "";
 	mRunlevel = -1;
 	
-	#ifndef TN_CFW
-	mIsoDriver = MODE_INFERNO;
-	#else
-	mIsoDriver = MODE_MARCH33;
-	#endif
+	mIsoDriver = MODE_DEFAULT;
 	
 	
 	// Clear Memory
@@ -38,10 +34,8 @@ int YLaunch::launch()
 
 	#ifndef TN_CFW
 	sctrlSESetBootConfFileIndex(mIsoDriver);
-	#endif
 	
 	// ISO Runlevel
-	#ifndef TN_CFW
 	if (this->getRunlevel() == PSP_INIT_APITYPE_UMDEMU_MS)
 	{
 		
@@ -65,7 +59,7 @@ int YLaunch::launch()
 	if (this->getRunlevel() == PSP_INIT_APITYPE_DISC)
 	{
 		umdFile = mBootPath.c_str();
-		if ( this->getAppType() != PSN_APP )	mBootPath = mEbootPath;
+		mBootPath = mEbootPath;
 		
 		//YLOG("sctrlSEMountUmdFromFile: %s, mIsoDriver: %X\n", umdFile.c_str(), mIsoDriver);
 		sctrlSEMountUmdFromFile(umdFile.c_str(), mIsoDriver);
@@ -95,11 +89,7 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case HOMEBREW_APP:
-			#ifndef TN_CFW
-			mIsoDriver = MODE_INFERNO;
-			#else
-			mIsoDriver = MODE_MARCH33;
-			#endif
+			mIsoDriver = MODE_DEFAULT;
 			tmpRunlevel = PSP_INIT_APITYPE_MS2;
 			break;
 			
@@ -109,20 +99,12 @@ int YLaunch::setAppType( int appType )
 			break;
 			
 		case UNTOUCHED_ISO_APP:
-			#ifndef TN_CFW
-			mIsoDriver = MODE_INFERNO;
-			#else
-			mIsoDriver = MODE_MARCH33;
-			#endif
+			mIsoDriver = MODE_DEFAULT;
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
 		case PATCHED_ISO_APP:
-			#ifndef TN_CFW
-			mIsoDriver = MODE_INFERNO;
-			#else
-			mIsoDriver = MODE_MARCH33;
-			#endif
+			mIsoDriver = MODE_DEFAULT;
 			tmpRunlevel = PSP_INIT_APITYPE_UMDEMU_MS;
 			break;
 			
@@ -177,12 +159,19 @@ int YLaunch::setRunlevel( int runlevel )
 			else	mEbootPath += ".OLD";
 			
 			
-			// Prepare ISO Reboot
+			// Prepare game Reboot
 			#ifndef TN_CFW
 			mParam.key = "umdemu";
 			#else
-			mParam.key = "game";
-			runlevel = PSP_INIT_APITYPE_DISC;
+            if (this->getAppType() == PSN_APP)
+            {
+                mParam.key = "umdemu";
+            }
+            else
+            {
+                mParam.key = "game";
+                runlevel = PSP_INIT_APITYPE_DISC;
+            }
 			#endif
 			
 			break;
