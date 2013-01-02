@@ -107,27 +107,39 @@ void DSystm::Destroy()
 
 int DSystm::readDir()
 {
+    YLOG("DSystm::readDir\n");
 	
 #ifdef PSP
 
+    //YLOG("getDir\n");
 	vector<SceIoDirent>* dir = YDir::getDir ( DSystm::mWorkPath );
 	
+    //YLOG("for\n");
 	for (int i=0; i<dir->size(); ++i )
 	{
 		string tmpName = (*dir)[i].d_name;
+        //YLOG("StrCast\n");
 		StrCast(tmpName, ::tolower);
+        //YLOG("StrCast done\n");
 		
-		tmpName = tmpName.substr(tmpName.size()-3, 3);
+		if (tmpName.size() > 3)  tmpName = tmpName.substr(tmpName.size()-3, 3);
+        else    tmpName = "";
+        //YLOG("substr done\n");
 		
+        //YLOG("test\n");
 		if ( tmpName == YEntry::ARCHIVE_EXTS[0] || tmpName == YEntry::ARCHIVE_EXTS[1] \
 			|| tmpName == "iso" || tmpName == "cso" \
 			|| ( (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR) )
 		{
+            //YLOG("YEntry auto\n");
 			YEntry yEntry((*dir)[i]);
+            //YLOG("mDir->mFolders.push_back\n");
 			mDir->mFolders.push_back(yEntry);
 		}
+        //YLOG("i++\n");
 	}
 	
+    //YLOG("SAFE_DELETE(dir)\n");
 	SAFE_DELETE(dir);
 	
 #else
@@ -142,6 +154,7 @@ int DSystm::readDir()
 #endif
 
 
+    //YLOG("DSystm::readDir done\n");
 	return 0;
 }
 
@@ -189,13 +202,19 @@ void DSystm::render()
 
 void DSystm::setWorkPath( string workPath )
 {
+    //YLOG("setWorkPath in\n");
 	if ( workPath[workPath.size()-1] != '/' )	workPath+= '/';
 	
+    //YLOG("if ( DSystm::mWorkPath != workPath )\n");
 	if ( DSystm::mWorkPath != workPath )
 	{
+        //YLOG("=\n");
 		DSystm::mWorkPath = workPath;
+        //YLOG("readDir\n");
 		readDir();
+        //YLOG("readDir done\n");
 	}
+    //YLOG("setWorkPath done\n");
 }
 
 void DSystm::setAppPath( string appPath )
@@ -418,6 +437,7 @@ bool DSystm::getOldMove()
 
 void DSystm::ChYDir( bool getParent )
 {
+    YLOG("DSystm::ChYDir %X\n", getParent );
 	string workpath;
 
 	if (getParent)	workpath = YDir::GetParent(mWorkPath);
@@ -425,10 +445,12 @@ void DSystm::ChYDir( bool getParent )
 
 	if ( workpath != mWorkPath )
 	{
+        YLOG("mDir->slideOut\n" );
 		mDir->slideOut( !getParent );
 
 
 		mOldDir = mDir;
+        YLOG("mDir = new YDir\n" );
 		mDir = new YDir();
 
 		string deadChild;
@@ -441,9 +463,12 @@ void DSystm::ChYDir( bool getParent )
 		else	deadChild = "";
 		//YLOG("mWorkPath: %s, deadChild: %s, %X\n", mWorkPath.c_str(), deadChild.c_str(), mWorkPath.rfind('/', mWorkPath.size()-2 ));
 
+        YLOG("setWorkPath\n" );
 		setWorkPath( workpath );
 		
+        YLOG("mDir->Create\n" );
 		mDir->Create( deadChild );
+        YLOG("mDir->Create done\n" );
 	}
 }
 

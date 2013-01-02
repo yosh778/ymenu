@@ -50,6 +50,7 @@ void YDir::Create( string deadChild, bool init )
 	if (deadChild != "" || init)	slideInY = YDir::MIN_FOLDER_Y;
 	else	slideInY = YDir::MAX_FOLDER_Y;
 
+    //YLOG("initSlideY\n");
 	initSlideY( slideInY, YEntry::yFolders );
 	
 	
@@ -59,6 +60,7 @@ void YDir::Create( string deadChild, bool init )
 
 	mCurDir = DSystm::GetInstance()->getWorkPath();
 	
+    //YLOG("initCurDirIdx\n");
 	initCurDirIdx( deadChild );
 	
 
