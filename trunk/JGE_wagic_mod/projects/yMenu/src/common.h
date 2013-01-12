@@ -31,7 +31,7 @@
 
 // Compile mode : define VHBL to compile a VHBL build, or define TN_CFW to compile a TN_CFW build
 //#define VHBL
-#define TN_CFW
+//#define TN_CFW
 
 
 
@@ -45,7 +45,13 @@
 #include <psppower.h>
 #include <psploadexec_kernel.h>
 #include <pspinit.h>
-#include <pspsystemctrl_user.h>
+#ifndef VHBL
+#ifndef TN_CFW
+#include "../../../../libs/include/pspsystemctrl_user_ark.h"
+#else
+#include "../../../../libs/include/pspsystemctrl_user_tn.h"
+#endif
+#endif
 #define PSP_INIT_APITYPE_UMDEMU_MS 0x123
 #define abs(a) fabs(a)	// avoids float bugs
 #define DO_EXIT sceKernelExitGame

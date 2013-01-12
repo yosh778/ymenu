@@ -4,7 +4,7 @@
 
 #include "common.h"
 
-#ifdef MODE_INFERNO
+#ifndef TN_CFW
 #define MODE_DEFAULT MODE_INFERNO
 #else
 #define MODE_DEFAULT MODE_MARCH33
