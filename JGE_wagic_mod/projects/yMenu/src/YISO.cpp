@@ -158,7 +158,7 @@ u16 YISO::findDirPathTable( string dirPath, u16 parent )
 		while ( !found &&  ++curIdx < mPathTable.size() )
 		{
 			if ( mPathTable[curIdx]->parentIdx == parent )
-				if ( !strncmp(mPathTable[curIdx]->name, dirPath.c_str(), mPathTable[curIdx]->nameSize) )
+				if ( !strnicmp(mPathTable[curIdx]->name, dirPath.c_str(), mPathTable[curIdx]->nameSize) )
 					found = true;
 		}
 	}
@@ -198,7 +198,7 @@ DirectoryRecord* YISO::findFile( string fileName, DirectoryRecord* dir )
 	
 	while ( !found &&  ++curIdx < dirList->size() )
 	{
-		if ( !strncmp((*dirList)[curIdx]->name, fileName.c_str(), (*dirList)[curIdx]->nameSize) )	found = true;
+		if ( !strnicmp((*dirList)[curIdx]->name, fileName.c_str(), (*dirList)[curIdx]->nameSize) )	found = true;
 	}
 	
 	
