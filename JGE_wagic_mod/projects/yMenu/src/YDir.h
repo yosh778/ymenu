@@ -39,6 +39,7 @@ private:
 	void updateLogicPosX();
 	bool initCurDirIdx( string deadChild );
 	bool findChildIdx( string deadChild );
+    void zoomCurFolder();
 	
 public:
 	static const int SLIDE_STEP_X;
@@ -63,6 +64,8 @@ public:
 	void slideOut( bool isParent );
 	void updateAlpha();
 	void initOffsetX();
+    void removeEntry( int index );
+    void addEntry( string name, bool isFolder );
 	
 	static string GetParent ( string path );
 

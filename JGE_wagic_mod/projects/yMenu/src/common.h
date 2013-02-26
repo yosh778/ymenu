@@ -32,6 +32,7 @@
 // Compile mode : define VHBL to compile a VHBL build, or define TN_CFW to compile a TN_CFW build
 //#define VHBL
 //#define TN_CFW
+#define PSP_VERSION
 
 
 
@@ -82,6 +83,13 @@
 #define PSP_CTRL_CIRCLE JGE_BTN_OK
 #define PSP_CTRL_TRIANGLE JGE_BTN_CANCEL
 #define PSP_CTRL_SQUARE JGE_BTN_PRI
+#define PSP_CTRL_HOME JGE_BTN_QUIT
+#define PSP_CTRL_START JGE_BTN_MENU
+#define PSP_CTRL_SELECT JGE_BTN_CTRL
+#define PSP_CTRL_HOLD JGE_BTN_POWER
+#define PSP_CTRL_NOTE JGE_BTN_SOUND
+#define PSP_CTRL_LTRIGGER JGE_BTN_PREV
+#define PSP_CTRL_RTRIGGER JGE_BTN_NEXT
 #else
 #define JGE_BTN_UP PSP_CTRL_UP
 #define JGE_BTN_DOWN PSP_CTRL_DOWN
@@ -90,6 +98,14 @@
 #define JGE_BTN_OK PSP_CTRL_CIRCLE
 #define JGE_BTN_SEC PSP_CTRL_CROSS
 #define JGE_BTN_CANCEL PSP_CTRL_TRIANGLE
+#define JGE_BTN_PRI PSP_CTRL_SQUARE
+#define JGE_BTN_QUIT PSP_CTRL_HOME
+#define JGE_BTN_MENU PSP_CTRL_START
+#define JGE_BTN_CTRL PSP_CTRL_SELECT
+#define JGE_BTN_POWER PSP_CTRL_HOLD
+#define JGE_BTN_SOUND PSP_CTRL_NOTE
+#define JGE_BTN_PREV PSP_CTRL_LTRIGGER
+#define JGE_BTN_NEXT PSP_CTRL_RTRIGGER
 #endif
 
 using namespace std;
@@ -129,6 +145,12 @@ typedef struct {
 	int offset;
 } dirIdx;
 
+typedef struct _CutCache {
+    string path;
+    bool isFolder;
+    bool on;
+} CutCache;
+
 
 enum name_formats_ {
 	ANY_FORMAT, LOWERCASE, UPPERCASE
@@ -136,50 +158,10 @@ enum name_formats_ {
 
 
 #define RESPATH "."
-/*
 
-	enum PspCtrlButtons
-	{
-		PSP_CTRL_SELECT     = 0x000001,
-		PSP_CTRL_START      = 0x000008,
-		PSP_CTRL_UP         = 0x000010,
-		PSP_CTRL_RIGHT      = 0x000020,
-		PSP_CTRL_DOWN      	= 0x000040,
-		PSP_CTRL_LEFT      	= 0x000080,
-		PSP_CTRL_LTRIGGER   = 0x000100,
-		PSP_CTRL_RTRIGGER   = 0x000200,
-		PSP_CTRL_TRIANGLE   = 0x001000,
-		PSP_CTRL_CIRCLE     = 0x002000,
-		PSP_CTRL_CROSS      = 0x004000,
-		PSP_CTRL_SQUARE     = 0x008000,
-		PSP_CTRL_HOME       = 0x010000,
-		PSP_CTRL_HOLD       = 0x020000,
-		PSP_CTRL_NOTE       = 0x800000,
-	};
-	
-	typedef enum Buttons
-  {
-    JGE_BTN_NONE = 0,   // No button pressed
-    JGE_BTN_QUIT,   // Home on PSP
-    JGE_BTN_MENU,   // Start on PSP
-    JGE_BTN_CTRL,   // Select
-    JGE_BTN_POWER,  // Hold
-    JGE_BTN_SOUND,  // Music note
-    JGE_BTN_RIGHT,
-    JGE_BTN_LEFT,
-    JGE_BTN_UP,
-    JGE_BTN_DOWN,
-    JGE_BTN_OK,     // Circle in Japan, Cross in Europe
-    JGE_BTN_CANCEL, // Triangle
-    JGE_BTN_PRI,    // Square (primary)
-    JGE_BTN_SEC,    // Cross or Circle (secondary)
-    JGE_BTN_PREV,   // Left trigger
-    JGE_BTN_NEXT,    // Right trigger
-    JGE_BTN_FULLSCREEN,    // Switch to fullscreen (obviously, PC only)
 
-    JGE_BTN_MAX = JGE_BTN_FULLSCREEN + 1
-  } JButton;
-  
-*/
+
 
 #endif
+
+

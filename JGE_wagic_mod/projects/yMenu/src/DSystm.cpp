@@ -31,6 +31,8 @@ DSystm::DSystm(
 	mOldDir = NULL;
 	mOldMove = false;
 	mToAddDir = 0;
+    mCutCache.on = false;
+    mExit = false;
 }
 
 DSystm::~DSystm()
@@ -63,7 +65,7 @@ void DSystm::Create( string workPath )
 	Display::LoadTextQuad ( "def_ico.png", TEX_TYPE_USE_VRAM, mDefIconTex, mDefIcon );
 	Display::LoadTextQuad ( "folder.png", TEX_TYPE_USE_VRAM, mFolderIconTex, mFolderIcon );
 	Display::LoadTextQuad ( "corrupt.png", TEX_TYPE_USE_VRAM, mCorruptIconTex, mCorruptIcon );
-	Display::LoadTextQuad ( "corrupt.png", TEX_TYPE_USE_VRAM, mFileIconTex, mFileIcon );
+	Display::LoadTextQuad ( "def_ico.png", TEX_TYPE_USE_VRAM, mFileIconTex, mFileIcon );
 	Display::LoadTextQuad ( "rar_ico.png", TEX_TYPE_USE_VRAM, mRarIconTex, mRarIcon );
 	Display::LoadTextQuad ( "zip_ico.png", TEX_TYPE_USE_VRAM, mZipIconTex, mZipIcon );
 
@@ -126,10 +128,14 @@ int DSystm::readDir()
         else    tmpName = "";
         //YLOG("substr done\n");
 		
+        #ifndef PSP_VERSION
+
         //YLOG("test\n");
 		if ( tmpName == YEntry::ARCHIVE_EXTS[0] || tmpName == YEntry::ARCHIVE_EXTS[1] \
 			|| tmpName == "iso" || tmpName == "cso" \
 			|| ( (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR) )
+        
+        #endif
 		{
             //YLOG("YEntry auto\n");
 			YEntry yEntry((*dir)[i]);
@@ -246,9 +252,14 @@ void DSystm::update()
 	// Exit button
 	if (engine->GetButtonClick(PSP_CTRL_TRIANGLE))
 	{
+        #ifdef PSP_VERSION
+
 		YLOG("Exit button pressed\n");
-		/*engine->End();
-		return;*/
+        mExit = true;
+		engine->End();
+		return;
+
+        #endif
 	}
 
 	Display* displayer = Display::GetInstance();
@@ -308,10 +319,14 @@ void DSystm::update()
 			// If we want to start homebrew
 			if ( mDir->mFolders[mDir->mCurFolder].isApp() )
 			{
+                #ifndef PSP_VERSION
+
 				setAppPath( mDir->mFolders[mDir->mCurFolder].getAppPath() );
 				engine->End();
 				YLOG("Start homebrew requested\n");
 				return;
+
+                #endif
 			}
 			// If we want to install save
 			else if ( mDir->mFolders[mDir->mCurFolder].inSavePath() )
@@ -349,6 +364,40 @@ void DSystm::update()
 				ChYDir( false );
 			}
 		}
+
+        #ifdef PSP_VERSION
+        if ( engine->GetButtonClick(PSP_CTRL_START) && !mDir->mFolders.empty() )
+        {
+            // If not cutting yet, prepare new cut
+            if ( !mCutCache.on )
+            {
+                mCutCache.path = mDir->mFolders[mDir->mCurFolder].getPathName();
+                mCutCache.isFolder = mDir->mFolders[mDir->mCurFolder].IsFolder();
+                JSoundSystem::GetInstance()->PlaySample(mClic);
+            }
+
+            // Toggle cut state
+            mCutCache.on = !mCutCache.on;
+        }
+
+        if ( mCutCache.on && engine->GetButtonClick(PSP_CTRL_SELECT) )
+        {
+            string srcPath = mCutCache.path;
+            string fullname = srcPath.substr(srcPath.rfind('/') + 1);
+            string destPath = this->getWorkPath() + fullname;
+
+            if ( srcPath != destPath )
+            {
+                if ( Lib::IoMove(srcPath, destPath) >= 0)
+                {
+                    mDir->addEntry(fullname, mCutCache.isFolder);
+                    JSoundSystem::GetInstance()->PlaySample(mClic);
+                }
+            }
+
+            mCutCache.on = false;
+        }
+        #endif
 	}
 	// If a notification is taking place and user says yes
 	else if ( displayer->getNotifyChoice() )
@@ -383,10 +432,7 @@ void DSystm::update()
 			if ( mDir->mFolders[mDir->mCurFolder].IsFolder() )	Lib::removeDir( mDir->mFolders[mDir->mCurFolder].getPathName() );
 			else	sceIoRemove( mDir->mFolders[mDir->mCurFolder].getPathName().c_str() );
 			
-			mDir->mFolders[mDir->mCurFolder].Destroy();
-			mDir->mFolders.erase(mDir->mFolders.begin()+mDir->mCurFolder);
-			if (mDir->mCurFolder == mDir->mFolders.size() && mDir->mCurFolder>0)	mDir->mCurFolder--;
-			mDir->initOffsetX();
+            mDir->removeEntry(mDir->mCurFolder);
 		}
 		displayer->setEventType(-1);
 	}
@@ -474,6 +520,12 @@ void DSystm::ChYDir( bool getParent )
 
 YLaunch* DSystm::getCurApp()
 {
-	return mDir->mFolders[mDir->getCurFolder()].mApp;
+    return mDir->mFolders[mDir->getCurFolder()].mApp;
 }
+
+bool DSystm::isExit()
+{
+    return mExit;
+}
+
 

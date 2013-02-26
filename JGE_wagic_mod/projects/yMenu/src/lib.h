@@ -23,6 +23,7 @@ public:
 	static int closeFile( int id );
 	static string GetInfo();
 	static void removeDir( string dirPath );
+    static int IoMove(string src, string dest);
 	
 	
 };

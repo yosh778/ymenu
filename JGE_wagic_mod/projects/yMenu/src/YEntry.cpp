@@ -13,24 +13,39 @@ string YEntry::EBOOT_NAMES[] = EBOOTNAMES;
 
 YEntry::YEntry( SceIoDirent folderEntry )
 {
-	mName = folderEntry.d_name;
-	mDispName = mName;
-	mIconTex = NULL;
-	mIcon = NULL;
-	mIsApp = false;
-	mEbootName = "";
-	mZoom = YEntry::DEF_ZOOM;
-	mApp = NULL;
-	mFileType = NO_FILE;
-	mEbootExists = false;
-	
+    bool isFolder;
+
 	if (folderEntry.d_stat.st_attr & FIO_SO_IFDIR && folderEntry.d_stat.st_mode & FIO_S_IFDIR)
-		mIsFolder = true;
+		isFolder = true;
 	else
-	{
-		mIsFolder = false;
-		this->setFileType();
-	}
+		isFolder = false;
+
+
+    this->init(folderEntry.d_name, isFolder);
+}
+
+YEntry::YEntry( string name, bool isFolder )
+{
+    this->init(name, isFolder);
+}
+
+void YEntry::init( string name, bool isFolder )
+{
+    mName = name;
+    mDispName = mName;
+    mIconTex = NULL;
+    mIcon = NULL;
+    mIsApp = false;
+    mEbootName = "";
+    mZoom = YEntry::DEF_ZOOM;
+    mApp = NULL;
+    mFileType = NO_FILE;
+    mEbootExists = false;
+    
+    mIsFolder = isFolder;
+
+    if (!mIsFolder)
+        this->setFileType();
 }
 
 YEntry::~YEntry()

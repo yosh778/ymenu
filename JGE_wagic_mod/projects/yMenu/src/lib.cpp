@@ -192,3 +192,27 @@ void Lib::removeDir( string dirPath )
 	sceIoRmdir((dirPath.substr(0,dirPath.size()-1)).c_str());
 }
 
+
+#ifdef PSP_VERSION
+int Lib::IoMove(string src, string dest)
+{
+    YLOG("dest.find(src): %d\n", dest.find(src));
+    if ( dest.find(src) != 0 )
+    {
+        YLOG("Moving %s -> %s...\n", src.c_str(), dest.c_str());
+
+        const char deviceSize = 4;
+
+        u32 data[2];
+        data[0] = (u32)src.c_str() + deviceSize;
+        data[1] = (u32)dest.c_str() + deviceSize;
+
+        int res = sceIoDevctl("ms0:", 0x02415830, data, sizeof(data), NULL, 0);
+
+        YLOG("0x%08X\n\n", res);
+
+        return res;
+    }
+    else    return -1;
+}
+#endif
