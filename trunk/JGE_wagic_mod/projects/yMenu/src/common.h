@@ -32,7 +32,7 @@
 // Compile mode : define VHBL to compile a VHBL build, or define TN_CFW to compile a TN_CFW build
 //#define VHBL
 //#define TN_CFW
-#define PSP_VERSION
+//#define PSP_VERSION
 
 
 
