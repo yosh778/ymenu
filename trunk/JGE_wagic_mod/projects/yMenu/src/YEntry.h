@@ -43,6 +43,7 @@ private:
 	void initDispName();
 	void setFileType();
 	void checkBackup();
+    void init( string name, bool isFolder );
 	
 	
 public:
@@ -56,6 +57,7 @@ public:
 	static const float DEF_INT_Y;
 
 	YEntry( SceIoDirent name );
+    YEntry( string name, bool isFolder );
 	~YEntry();
 	void Create();
 	void Destroy();

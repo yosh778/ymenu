@@ -39,6 +39,9 @@ private:
 	bool mOldMove;
 	int mToAddDir;
 
+    CutCache mCutCache;
+    bool mExit;
+
 	string mWorkPath;
 	JSample *mClic;
 	
@@ -82,6 +85,7 @@ public:
 	JQuad* getZipIcon();
 	bool getOldMove();
 	YLaunch* getCurApp();
+    bool isExit();
 };
 
 

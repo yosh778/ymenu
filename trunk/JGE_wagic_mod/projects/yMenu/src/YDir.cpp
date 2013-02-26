@@ -63,12 +63,7 @@ void YDir::Create( string deadChild, bool init )
     //YLOG("initCurDirIdx\n");
 	initCurDirIdx( deadChild );
 	
-
-	if (mCurFolder < mFolders.size())
-	{
-		mFolders[mCurFolder].setZoom(1);
-		mFocus.x = (SCREEN_WIDTH-DEFAULT_ICON_W) /2;
-	}
+    zoomCurFolder();
 	//YLOG("YDir::Create done\n");
 }
 
@@ -108,7 +103,8 @@ int YDir::addCurFolder( int step )
 			mOldFolder = mCurFolder;
 			if (step >0)
 				if ( mCurFolder + step < mFolders.size() )	mCurFolder+= step, move = 1;
-				else	mCurFolder = mFolders.size()-1;
+				else if (mFolders.size() > 0)	mCurFolder = mFolders.size()-1;
+                else    mCurFolder = 0;
 			
 			else if (step < 0)
 				if ( mCurFolder + step >= 0 )	mCurFolder+= step, move = 1;
@@ -480,6 +476,8 @@ bool YDir::restoreCurDirIdx()
 	map<string,int>::iterator it = mDirIdxs.find(mCurDir);
 
 	if ( it != mDirIdxs.end() )	mCurFolder = it->second, found = true;
+
+    if (mCurFolder >= mFolders.size() && mCurFolder > 0)   mCurFolder = mFolders.size() - 1;
 	
 	
 	return found;
@@ -508,12 +506,46 @@ bool YDir::initCurDirIdx( string deadChild )
 
 bool YDir::findChildIdx( string deadChild )
 {
-	bool found = false;
-	
-	for (int i=0; !found && i<mFolders.size(); ++i )
-		if ( mFolders[i].getRealName() == deadChild )	mCurFolder = i, found = true;
-	
-	return found;
+    bool found = false;
+    
+    for (int i=0; !found && i<mFolders.size(); ++i )
+        if ( mFolders[i].getRealName() == deadChild )   mCurFolder = i, found = true;
+    
+    return found;
 }
+
+void YDir::removeEntry( int index )
+{
+    mFolders[index].Destroy();
+    mFolders.erase(mFolders.begin()+index);
+    if (index == mFolders.size() && index>0)
+    {
+        mCurFolder--;
+        this->initOffsetX();
+    }
+}
+
+void YDir::addEntry( string name, bool isFolder )
+{
+    YEntry yEntry(name, isFolder);
+    mFolders.push_back(yEntry);
+
+    mFolders[mFolders.size()-1].Create();
+
+    YLOG("mCurFolder: %d\nmFolders.size(): %d", mCurFolder, mFolders.size());
+    if (mFolders.size() == 1)
+        zoomCurFolder();
+}
+
+void YDir::zoomCurFolder()
+{
+    if (mCurFolder < mFolders.size())
+    {
+        mFolders[mCurFolder].setZoom(1);
+        mFocus.x = (SCREEN_WIDTH-DEFAULT_ICON_W) /2;
+    }
+}
+
+
 
 
