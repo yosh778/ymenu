@@ -46,13 +46,13 @@
 #include <psppower.h>
 #include <psploadexec_kernel.h>
 #include <pspinit.h>
-#ifndef VHBL
+//#ifndef VHBL
 #ifndef TN_CFW
 #include "../../../../libs/include/pspsystemctrl_user_ark.h"
 #else
 #include "../../../../libs/include/pspsystemctrl_user_tn.h"
 #endif
-#endif
+//#endif
 #define PSP_INIT_APITYPE_UMDEMU_MS 0x123
 #define abs(a) fabs(a)	// avoids float bugs
 #define DO_EXIT sceKernelExitGame
