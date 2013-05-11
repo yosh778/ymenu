@@ -15,7 +15,7 @@ LIBS = -lpspsystemctrl_user -lunziprar -ljge300 -lhgetools -lfreetype -lc -ljpeg
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = yMenu
-PSP_EBOOT_ICON = icon.png
+PSP_EBOOT_ICON = icon_full.png
 
 PSPSDK=$(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
