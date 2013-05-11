@@ -115,7 +115,7 @@ using namespace std;
 #define FONT_SIZE 28
 #define FPS_RATE 60
 #define EBOOTNAMES { "VBOOT.PBP", "FBOOT.PBP", "wmenu.bin", "EBOOT.PBP" }
-#define HOMEBREW_PATH "ms0:/PSP/GAME"
+#define HOMEBREW_PATH "ms0:/PSP/HOMEBREW"
 #define SAVEDATA_PATH "ms0:/PSP/SAVEDATA"
 #define DEFAULT_ICON_W 144
 #define DEFAULT_ICON_H 80
