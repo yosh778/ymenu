@@ -156,7 +156,7 @@ string Lib::GetInfo()
 	ss << setfill('0');
 	ss << setw(2) <<  d << '/' << setw(2) <<  m << '/' << y;
 	ss << "  ";
-	ss << setw(2) << h << semiColon << setw(2) << mn;
+	ss << setw(2) << h << semiColon << setw(2) << mn << semiColon << setw(2) << s;
 	
 	
 	return ss.str();

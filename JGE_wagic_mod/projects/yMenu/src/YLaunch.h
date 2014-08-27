@@ -24,7 +24,8 @@ private:
 	string mBootPath;
 	string mEbootPath;
 	int mIsoDriver;
-	
+	bool m_is_pspgo;
+
 	// Load Execute Parameter
 	struct SceKernelLoadExecVSHParam mParam;
 	

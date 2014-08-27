@@ -120,29 +120,29 @@ int DSystm::readDir()
 	for (int i=0; i<dir->size(); ++i )
 	{
 		string tmpName = (*dir)[i].d_name;
-        //YLOG("StrCast\n");
+	//YLOG("StrCast\n");
 		StrCast(tmpName, ::tolower);
-        //YLOG("StrCast done\n");
+	//YLOG("StrCast done\n");
 		
 		if (tmpName.size() > 3)  tmpName = tmpName.substr(tmpName.size()-3, 3);
-        else    tmpName = "";
-        //YLOG("substr done\n");
+	else    tmpName = "";
+	//YLOG("substr done\n");
 		
-        #ifndef PSP_VERSION
+	#ifndef PSP_VERSION
 
-        //YLOG("test\n");
+	//YLOG("test\n");
 		if ( tmpName == YEntry::ARCHIVE_EXTS[0] || tmpName == YEntry::ARCHIVE_EXTS[1] \
 			|| tmpName == "iso" || tmpName == "cso" \
 			|| ( (*dir)[i].d_stat.st_attr & FIO_SO_IFDIR && (*dir)[i].d_stat.st_mode & FIO_S_IFDIR) )
-        
-        #endif
+	
+	#endif
 		{
-            //YLOG("YEntry auto\n");
+	    //YLOG("YEntry auto\n");
 			YEntry yEntry((*dir)[i]);
-            //YLOG("mDir->mFolders.push_back\n");
+	    //YLOG("mDir->mFolders.push_back\n");
 			mDir->mFolders.push_back(yEntry);
 		}
-        //YLOG("i++\n");
+	//YLOG("i++\n");
 	}
 	
     //YLOG("SAFE_DELETE(dir)\n");
@@ -214,11 +214,11 @@ void DSystm::setWorkPath( string workPath )
     //YLOG("if ( DSystm::mWorkPath != workPath )\n");
 	if ( DSystm::mWorkPath != workPath )
 	{
-        //YLOG("=\n");
+	//YLOG("=\n");
 		DSystm::mWorkPath = workPath;
-        //YLOG("readDir\n");
+	//YLOG("readDir\n");
 		readDir();
-        //YLOG("readDir done\n");
+	//YLOG("readDir done\n");
 	}
     //YLOG("setWorkPath done\n");
 }
@@ -252,14 +252,14 @@ void DSystm::update()
 	// Exit button
 	if (engine->GetButtonClick(PSP_CTRL_TRIANGLE))
 	{
-        #ifdef PSP_VERSION
+		#ifdef PSP_VERSION
 
 		YLOG("Exit button pressed\n");
-        mExit = true;
+		mExit = true;
 		engine->End();
 		return;
 
-        #endif
+		#endif
 	}
 
 	Display* displayer = Display::GetInstance();
@@ -319,14 +319,10 @@ void DSystm::update()
 			// If we want to start homebrew
 			if ( mDir->mFolders[mDir->mCurFolder].isApp() )
 			{
-                #ifndef PSP_VERSION
-
 				setAppPath( mDir->mFolders[mDir->mCurFolder].getAppPath() );
 				engine->End();
 				YLOG("Start homebrew requested\n");
 				return;
-
-                #endif
 			}
 			// If we want to install save
 			else if ( mDir->mFolders[mDir->mCurFolder].inSavePath() )
@@ -365,39 +361,39 @@ void DSystm::update()
 			}
 		}
 
-        #ifdef PSP_VERSION
-        if ( engine->GetButtonClick(PSP_CTRL_START) && !mDir->mFolders.empty() )
-        {
-            // If not cutting yet, prepare new cut
-            if ( !mCutCache.on )
-            {
-                mCutCache.path = mDir->mFolders[mDir->mCurFolder].getPathName();
-                mCutCache.isFolder = mDir->mFolders[mDir->mCurFolder].IsFolder();
-                JSoundSystem::GetInstance()->PlaySample(mClic);
-            }
+	#ifdef PSP_VERSION
+	if ( engine->GetButtonClick(PSP_CTRL_START) && !mDir->mFolders.empty() )
+	{
+	    // If not cutting yet, prepare new cut
+	    if ( !mCutCache.on )
+	    {
+		mCutCache.path = mDir->mFolders[mDir->mCurFolder].getPathName();
+		mCutCache.isFolder = mDir->mFolders[mDir->mCurFolder].IsFolder();
+		JSoundSystem::GetInstance()->PlaySample(mClic);
+	    }
 
-            // Toggle cut state
-            mCutCache.on = !mCutCache.on;
-        }
+	    // Toggle cut state
+	    mCutCache.on = !mCutCache.on;
+	}
 
-        if ( mCutCache.on && engine->GetButtonClick(PSP_CTRL_SELECT) )
-        {
-            string srcPath = mCutCache.path;
-            string fullname = srcPath.substr(srcPath.rfind('/') + 1);
-            string destPath = this->getWorkPath() + fullname;
+	if ( mCutCache.on && engine->GetButtonClick(PSP_CTRL_SELECT) )
+	{
+	    string srcPath = mCutCache.path;
+	    string fullname = srcPath.substr(srcPath.rfind('/') + 1);
+	    string destPath = this->getWorkPath() + fullname;
 
-            if ( srcPath != destPath )
-            {
-                if ( Lib::IoMove(srcPath, destPath) >= 0)
-                {
-                    mDir->addEntry(fullname, mCutCache.isFolder);
-                    JSoundSystem::GetInstance()->PlaySample(mClic);
-                }
-            }
+	    if ( srcPath != destPath )
+	    {
+		if ( Lib::IoMove(srcPath, destPath) >= 0)
+		{
+		    mDir->addEntry(fullname, mCutCache.isFolder);
+		    JSoundSystem::GetInstance()->PlaySample(mClic);
+		}
+	    }
 
-            mCutCache.on = false;
-        }
-        #endif
+	    mCutCache.on = false;
+	}
+	#endif
 	}
 	// If a notification is taking place and user says yes
 	else if ( displayer->getNotifyChoice() )
@@ -432,7 +428,7 @@ void DSystm::update()
 			if ( mDir->mFolders[mDir->mCurFolder].IsFolder() )	Lib::removeDir( mDir->mFolders[mDir->mCurFolder].getPathName() );
 			else	sceIoRemove( mDir->mFolders[mDir->mCurFolder].getPathName().c_str() );
 			
-            mDir->removeEntry(mDir->mCurFolder);
+	    mDir->removeEntry(mDir->mCurFolder);
 		}
 		displayer->setEventType(-1);
 	}
@@ -491,12 +487,12 @@ void DSystm::ChYDir( bool getParent )
 
 	if ( workpath != mWorkPath )
 	{
-        YLOG("mDir->slideOut\n" );
+	YLOG("mDir->slideOut\n" );
 		mDir->slideOut( !getParent );
 
 
 		mOldDir = mDir;
-        YLOG("mDir = new YDir\n" );
+	YLOG("mDir = new YDir\n" );
 		mDir = new YDir();
 
 		string deadChild;
@@ -509,12 +505,12 @@ void DSystm::ChYDir( bool getParent )
 		else	deadChild = "";
 		//YLOG("mWorkPath: %s, deadChild: %s, %X\n", mWorkPath.c_str(), deadChild.c_str(), mWorkPath.rfind('/', mWorkPath.size()-2 ));
 
-        YLOG("setWorkPath\n" );
+	YLOG("setWorkPath\n" );
 		setWorkPath( workpath );
 		
-        YLOG("mDir->Create\n" );
+	YLOG("mDir->Create\n" );
 		mDir->Create( deadChild );
-        YLOG("mDir->Create done\n" );
+	YLOG("mDir->Create done\n" );
 	}
 }
 
