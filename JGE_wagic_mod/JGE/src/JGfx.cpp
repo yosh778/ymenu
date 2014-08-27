@@ -1545,7 +1545,8 @@ int JRenderer::LoadPNG(TextureInfo &textureInfo, const char* filename, int mode,
   
   
   // Added special error code to avoid some crash
-  if ( -1 == png_read_end(png_ptr, info_ptr) )	done = false;
+  // Commented : not useful for the image itself anyway
+  //if ( -1 == png_read_end(png_ptr, info_ptr) )	done = false;
   
   
   //JLOG("Destroying read struct");
