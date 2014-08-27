@@ -10,6 +10,5 @@ With minpspsdk having so many dependency issues depending on the version, here's
 
   * To compile with minpspsdk, first get a copy of *[http://www.jetdrone.com/minpspw minpspsdk 0.10.0]*, as most other versions seem to throw dependency errors.
   * Uninstall all existing minpspsdk version, and install version 0.10.0
-  * In common.h, make sure one of #define TN_CFW / #define VHBL defines is uncommented, to choose one compile mode
-  * Compile with command "make 3xx" in the "[...]/project/yMenu/" folder
+  * Compile with command "make MODE=ark" or "make MODE=tn" or "make MODE=pro" or "make MODE=vhbl" in the "[...]/project/yMenu/" folder
   * Congrats ! You should now have successfully compiled yMenu
