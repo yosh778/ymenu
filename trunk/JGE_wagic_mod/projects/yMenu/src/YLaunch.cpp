@@ -9,13 +9,14 @@ YLaunch::YLaunch( string bootPath )
 	this->setBootPath( bootPath );
 	mEbootPath = "";
 	mRunlevel = -1;
-	
+	m_is_pspgo = false;
+
 	mIsoDriver = MODE_DEFAULT;
-	
-	
+
+
 	// Clear Memory
 	memset(&mParam, 0, sizeof(mParam));
-	
+
 	// Set Common Parameters
 	mParam.size = sizeof(mParam);
 }
@@ -31,10 +32,13 @@ int YLaunch::launch()
 	if ( this->getAppType() == NO_APP || this->getBootPath() == "" )	return -1;
 	
 	string umdFile = "";
+	int ret = -1;
+
+	#ifndef VHBL
 
 	#ifndef TN_CFW
 	sctrlSESetBootConfFileIndex(mIsoDriver);
-	
+
 	// ISO Runlevel
 	if (this->getRunlevel() == PSP_INIT_APITYPE_UMDEMU_MS)
 	{
@@ -45,7 +49,7 @@ int YLaunch::launch()
 			// Disable Galaxy ISO Emulator Patch
 			umdFile = "";
 		}
-		
+
 		// ISO
 		else
 		{
@@ -67,13 +71,46 @@ int YLaunch::launch()
 	}
 	#endif
 
-	
+
+	// PSP GO Fix
+	#ifdef PROCFW
+		// This call will always fail, but with a different error code depending on the model
+		SceUID result = sceIoOpen("ef0:/", 1, 0777);
+
+		// Check for "No such device" error
+		m_is_pspgo = !(result == (int)0x80020321);
+
+		if (m_is_pspgo) {
+			switch ( mRunlevel )
+			{
+				case PSP_INIT_APITYPE_MS2:
+					mRunlevel = PSP_INIT_APITYPE_EF2;
+					break;
+
+				case PSP_INIT_APITYPE_UMDEMU_MS:
+					mRunlevel = PSP_INIT_APITYPE_UMDEMU_EF;
+					break;
+
+				case PSP_INIT_APITYPE_MS5:
+					mRunlevel = PSP_INIT_APITYPE_EF5;
+					break;
+			}
+
+			if (mEbootPath[0] == 'm' && mEbootPath[1] == 's')
+			{
+				mEbootPath[0] = 'e';
+				mEbootPath[1] = 'f';
+			}
+		}
+	#endif
+
 	//YLOG("mRunlevel: %X, bootPath: %s\n, mParam.key: %s, mParam.argp: %s, mParam.args: %X\n", mRunlevel, this->getBootPath().c_str(), mParam.key, mParam.argp, mParam.args );
 	// Trigger Reboot
-	int ret = sctrlKernelLoadExecVSHWithApitype(mRunlevel, this->getBootPath().c_str(), &mParam);
-	
-	//YLOG("sctrlKernelLoadExecVSHWithApitype done done");
-	
+	ret = sctrlKernelLoadExecVSHWithApitype(mRunlevel, this->getBootPath().c_str(), &mParam);
+
+	//YLOG("sctrlKernelLoadExecVSHWithApitype done");
+	#endif
+
 	return ret;
 }
 
@@ -163,15 +200,15 @@ int YLaunch::setRunlevel( int runlevel )
 			#ifndef TN_CFW
 			mParam.key = "umdemu";
 			#else
-            if (this->getAppType() == PSN_APP)
-            {
-                mParam.key = "umdemu";
-            }
-            else
-            {
-                mParam.key = "game";
-                runlevel = PSP_INIT_APITYPE_DISC;
-            }
+			if (this->getAppType() == PSN_APP)
+			{
+				mParam.key = "umdemu";
+			}
+			else
+			{
+				mParam.key = "game";
+				runlevel = PSP_INIT_APITYPE_DISC;
+			}
 			#endif
 			
 			break;
@@ -213,6 +250,14 @@ void YLaunch::setBootPath( string bootPath )
 
 string YLaunch::getBootPath()
 {
+	// PSP GO Fix
+	#ifdef PROCFW
+	if (m_is_pspgo) {
+		mBootPath[0] = 'e';
+		mBootPath[1] = 'f';
+	}
+	#endif
+
 	return mBootPath;
 }
 

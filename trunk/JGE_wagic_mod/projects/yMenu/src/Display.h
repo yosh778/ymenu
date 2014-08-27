@@ -24,7 +24,6 @@ private:
 	float mBgAlpha;
 	unsigned long mLastSwap;
 	bool mSwapBg;
-	int mSwapBgState;
 	int mLTTid;
 #ifdef USE_TTF
 	JTTFont* mFont;
@@ -54,8 +53,10 @@ private:
 	~Display();
 	
 	void FindBgs();
-	
+
+
 public:
+	static int swapBgState(int mSwapBgState = -2);
 	static int MAX_HIDE_OPACITY;
 	
 	void Destroy();

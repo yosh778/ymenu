@@ -25,15 +25,9 @@
 
 
 
-// DEBUG mode : uncomment to compile a debug build
-//#define YDEBUG
-
-
-// Compile mode : define VHBL to compile a VHBL build, or define TN_CFW to compile a TN_CFW build
-//#define VHBL
-//#define TN_CFW
-//#define PSP_VERSION
-
+#ifdef PROCFW
+#define PSP_VERSION
+#endif
 
 
 #define FATAL_ERROR(...) DO_EXIT()
@@ -54,6 +48,10 @@
 #endif
 //#endif
 #define PSP_INIT_APITYPE_UMDEMU_MS 0x123
+#define PSP_INIT_APITYPE_UMDEMU_EF 0x125
+#define PSP_INIT_APITYPE_EF2 0x152
+#define PSP_INIT_APITYPE_EF5 0x155
+
 #define abs(a) fabs(a)	// avoids float bugs
 #define DO_EXIT sceKernelExitGame
 

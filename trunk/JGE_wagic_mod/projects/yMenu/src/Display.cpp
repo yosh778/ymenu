@@ -5,6 +5,11 @@
 Display* Display::mDisplay = NULL;
 int Display::MAX_HIDE_OPACITY = 246;
 
+int mSwapBgState = -1;
+
+
+// Directory IO Semaphore
+static SceUID swapBgStateSema = -1;
 
 
 Display::Display(
@@ -16,7 +21,7 @@ Display::Display(
 				)
 {
 	mFont = font;
-	mSwapBgState = -1;
+	swapBgState(-1);
 	mLastSwap = clock();
 	mBgAlpha = 1;
 	mOldBgTex = NULL;
@@ -31,9 +36,14 @@ Display::Display(
 	mNotify = NOTIFICATION_INACTIVE;
 	mHideOpacity = 0;
 	mEventType = -1;
-	
+
+	#ifndef VHBL
+	// Create Semaphore
+	swapBgStateSema = sceKernelCreateSema("", 0, 1, 1, NULL);
+	#endif
+
 	this->FindBgs();
-	
+
 	int dummy;
 	this->SwapBg( dummy, 0 );
 
@@ -116,7 +126,7 @@ void Display::SwapBg( int& finished, int mode )
 		else	LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_NONE, mBgTex, mBg );
 		#else
 		LoadTextQuad ( mWallpapers[mCurBg], TEX_TYPE_NONE, mBgTex, mBg );
-		finished = 1;
+		swapBgState(1);
 		#endif
 	}
 }
@@ -244,9 +254,11 @@ int Lib_LoadTexThread(SceSize args, void *argp)
     // TODO : Secure tex / quad / finished multithread access ..
 	*(lTT->tex) = tex;
 	*(lTT->quad) = quad;
-	*(lTT->finished) = 1;
-	
-	
+
+	Display::swapBgState(1);
+	//*(lTT->finished) = 1;
+
+
 	sceKernelExitThread(0);
 	
 	return 0;
@@ -273,14 +285,14 @@ void Display::LoadTQThread ( string path, int options, JTexture*& tex, JQuad*& q
 void Display::updateBg()
 {
 
-	if ( clock()-mLastSwap > BG_SWAP_TIME*CLOCKS_PER_SEC && mSwapBgState==-1 )
+	if ( clock()-mLastSwap > BG_SWAP_TIME*CLOCKS_PER_SEC && swapBgState()==-1 )
 	{
 		mSwapBg = true;
 		mLastSwap = clock();
 	}
 
 	
-	if ( mOldBg != NULL && mSwapBgState==-1 )
+	if ( mOldBg != NULL && swapBgState()==-1 )
 	{
 		mLastSwap = clock();
 		const float aStep = BG_SWAP_ASTEP;
@@ -302,28 +314,49 @@ void Display::updateBg()
 
 	if ( mSwapBg )
 	{
-		mSwapBgState = 0;
+		swapBgState(0);
 		mOldBgTex = mBgTex;
 		mOldBg = mBg;
 		mBgTex = NULL;
 		mBg = NULL;
+		int res = swapBgState();
 		#ifdef PSP
-		this->SwapBg(mSwapBgState, 1);
+		this->SwapBg(res, 1);
 		#else
-		this->SwapBg(mSwapBgState, 0);
+		this->SwapBg(res, 0);
 		#endif
 		mSwapBg = false;
 	}
 	
 	
 	// Once our next wallpaper is loaded
-	if ( mSwapBgState==1 )
+	if ( swapBgState() == 1 )
 	{
 		mBgAlpha = 0;
-		mSwapBgState = -1;
+		swapBgState(-1);
 	}
 }
 
+int Display::swapBgState(int state)
+{
+	#ifndef VHBL
+	// Wait for Semaphore & Lock It
+	sceKernelWaitSema(swapBgStateSema, 1, 0);
+	#endif
+
+	if (state != -2)
+		mSwapBgState = state;
+
+	else
+		state = mSwapBgState;
+
+	#ifndef VHBL
+	// Unlock Semaphore
+	sceKernelSignalSema(swapBgStateSema, 1);
+	#endif
+
+	return state;
+}
 
 void Display::renderBg()
 {
@@ -337,7 +370,7 @@ void Display::renderBg()
 	}
 	
 	// Display current bg only if loading finished
-	if (this->mBg != NULL && mSwapBgState==-1)
+	if (this->mBg != NULL && swapBgState()==-1)
 	{
 		Display::SetQuadAlpha(mBg, mBgAlpha);
 		renderer->RenderQuad(mBg, 0, 0);
@@ -348,7 +381,7 @@ void Display::renderBg()
 
 int Display::getSwapBgState()
 {
-	return mSwapBgState;
+	return swapBgState();
 }
 
 void Display::renderInfoQuad()
